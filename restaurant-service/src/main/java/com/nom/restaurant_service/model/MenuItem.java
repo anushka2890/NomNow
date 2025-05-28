@@ -1,8 +1,11 @@
 package com.nom.restaurant_service.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Table(name = "menu_item")
+@Data
 public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

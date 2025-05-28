@@ -1,12 +1,14 @@
 package com.nom.restaurant_service.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "restaurant")
+@Data
 public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
