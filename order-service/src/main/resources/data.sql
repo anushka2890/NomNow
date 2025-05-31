@@ -1,11 +1,23 @@
--- Insert a sample order (let the database handle ID auto-generation)
-INSERT INTO orders (id, user_id, order_status, order_date, total_amount, delivery_address)
-VALUES (1, 101, 'CONFIRMED', CURRENT_TIMESTAMP, 750.00, '221B Baker Street, London');
+-- Insert a sample order
+INSERT INTO orders (user_id, order_status, order_date, total_amount, delivery_address)
+VALUES (102, 'CONFIRMED', CURRENT_TIMESTAMP, 750.00, '221B Charming Avenue, New York');
 
--- Assuming the first order got ID = 1 (PostgreSQL starts with 1 by default)
--- Insert related order items for order_id = 1
-INSERT INTO order_items (id, order_id, product_id, quantity, price)
+-- ⚠️ Refer to the latest inserted order ID dynamically
+-- For PostgreSQL, we use `currval('orders_id_seq')` to get the latest generated ID from the sequence
+
+-- Insert order items for the above order
+INSERT INTO order_items (order_id, product_id, quantity, price)
 VALUES
-    (1, 1, 501, 2, 250.00),
-    (2, 1, 502, 1, 150.00),
-    (3, 1, 503, 2, 50.00);
+    (currval('orders_id_seq'), 501, 2, 250.00),
+    (currval('orders_id_seq'), 502, 1, 150.00),
+    (currval('orders_id_seq'), 503, 2, 50.00);
+
+-- Optional: check current orders
+-- SELECT * FROM orders;
+
+-- Optional: debug locking issues
+-- SELECT * FROM pg_locks WHERE NOT granted;
+-- SELECT pid, age(clock_timestamp(), query_start), query
+-- FROM pg_stat_activity
+-- WHERE state != 'idle'
+-- ORDER BY query_start;

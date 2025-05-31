@@ -13,6 +13,7 @@ public class OrderMapper {
         orderResponseDTO.setDeliveryAddress(order.getDeliveryAddress());
         orderResponseDTO.setOrderTime(order.getOrderDate());
         orderResponseDTO.setItems(order.getOrderItems().stream().map(OrderMapper::toItemDTO).toList());
+        orderResponseDTO.setRestaurantId(order.getRestaurantId());
         return orderResponseDTO;
     }
 

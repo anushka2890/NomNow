@@ -1,13 +1,11 @@
-package com.nom.order_service.DTO;
+package com.nom.restaurant_service.DTO;
 
-import com.nom.order_service.enums.OrderStatus;
+import com.nom.restaurant_service.enums.OrderStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-@Data
-public class OrderResponseDTO {
+public class OrderDTO {
     private Long orderId;
     private OrderStatus status;
     private List<OrderItemDTO> items;
@@ -54,7 +52,6 @@ public class OrderResponseDTO {
     public void setOrderTime(LocalDateTime orderTime) {
         this.orderTime = orderTime;
     }
-
     public Long getRestaurantId() {
         return restaurantId;
     }

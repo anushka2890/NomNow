@@ -11,7 +11,6 @@ import com.nom.order_service.mapper.OrderMapper;
 import com.nom.order_service.model.Order;
 import com.nom.order_service.model.OrderItem;
 import com.nom.order_service.repository.OrderRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +43,8 @@ public class OrderService {
         order.setUserId(orderRequestDTO.getUserId());
         order.setOrderStatus(OrderStatus.PENDING); // set initial status to PENDING
         order.setOrderDate(LocalDateTime.now());
+        order.setDeliveryAddress(orderRequestDTO.getAddress());
+        order.setRestaurantId(orderRequestDTO.getRestaurantId());
 
         // convert DTO items to entity items and add to order
         for (OrderItemDTO itemDTO : orderRequestDTO.getItems()) {
@@ -54,9 +55,9 @@ public class OrderService {
         }
 
         Order savedOrder = orderRepository.save(order);
-
+        OrderResponseDTO kafkaMessage = OrderMapper.toDTO(savedOrder);
         // Serialize saved order and publish event to Kafka
-        String orderJson = objectMapper.writeValueAsString(savedOrder);
+        String orderJson = objectMapper.writeValueAsString(kafkaMessage);
         kafkaTemplate.send(TOPIC, orderJson);
 
         log.info("Order placed: {}", savedOrder);

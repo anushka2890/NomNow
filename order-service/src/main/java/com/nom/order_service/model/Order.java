@@ -7,43 +7,39 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "User Id is required")
     @Column(nullable = false)
     private Long userId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @NotNull(message = "Order Status is required")
     private OrderStatus orderStatus;
 
     @Column(nullable = false)
-    @NotNull(message = "Order Date is required")
     private LocalDateTime orderDate;
 
     @Column(nullable = false)
-    @NotNull(message = "Total Amount is required")
     private double totalAmount;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @NotEmpty(message = "Order Items are required")
-    private List<OrderItem> orderItems;
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @Column(nullable = false)
-    @NotEmpty(message = "Delivery Address is required")
     private String deliveryAddress;
+
+    @Column(nullable = false)
+    private Long restaurantId;
 
     public void addOrderItem(OrderItem item) {
         orderItems.add(item);
@@ -58,52 +54,59 @@ public class Order {
         this.id = id;
     }
 
-    public @NotNull(message = "User Id is required") Long getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(@NotNull(message = "User Id is required") Long userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public @NotNull(message = "Order Status is required") OrderStatus getOrderStatus() {
+    public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(@NotNull(message = "Order Status is required") OrderStatus orderStatus) {
+    public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 
-    public @NotNull(message = "Order Date is required") LocalDateTime getOrderDate() {
+    public LocalDateTime getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(@NotNull(message = "Order Date is required") LocalDateTime orderDate) {
+    public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 
-    @NotNull(message = "Total Amount is required")
     public double getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(@NotNull(message = "Total Amount is required") double totalAmount) {
+    public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
 
-    public @NotEmpty(message = "Order Items are required") List<OrderItem> getOrderItems() {
+    public List<OrderItem> getOrderItems() {
         return orderItems;
     }
 
-    public void setOrderItems(@NotEmpty(message = "Order Items are required") List<OrderItem> orderItems) {
+    public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
     }
 
-    public @NotEmpty(message = "Delivery Address is required") String getDeliveryAddress() {
+    public String getDeliveryAddress() {
         return deliveryAddress;
     }
 
-    public void setDeliveryAddress(@NotEmpty(message = "Delivery Address is required") String deliveryAddress) {
+    public void setDeliveryAddress(String deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
+    }
+
+    public Long getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(Long restaurantId) {
+        this.restaurantId = restaurantId;
     }
 }

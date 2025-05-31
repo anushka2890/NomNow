@@ -14,8 +14,15 @@ public class RestaurantService {
     private RestaurantRepository restaurantRepository;
 
     public Restaurant createRestaurant(Restaurant restaurant) {
+        // Set back-reference on each menu item
+        if (restaurant.getMenuItems() != null) {
+            for (MenuItem item : restaurant.getMenuItems()) {
+                item.setRestaurant(restaurant);
+            }
+        }
         return restaurantRepository.save(restaurant);
     }
+
 
     public Restaurant findRestaurantById(Long id) {
         return restaurantRepository.findById(id).orElseThrow(
