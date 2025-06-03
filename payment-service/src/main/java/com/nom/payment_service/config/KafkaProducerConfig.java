@@ -1,7 +1,6 @@
-package com.nom.order_service.config;
+package com.nom.payment_service.config;
 
-import com.nom.order_service.DTO.OrderResponseDTO;
-import com.nom.order_service.DTO.PaymentRequestDTO;
+import com.nom.payment_service.dto.PaymentStatusDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -16,20 +15,17 @@ import java.util.Map;
 
 @Configuration
 public class KafkaProducerConfig {
-
     @Bean
-    public ProducerFactory<String, String> kafkaProducerFactory() {
+    public ProducerFactory<String, String> paymentStatusProducerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        config.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false);
         return new DefaultKafkaProducerFactory<>(config);
     }
 
     @Bean
-    public KafkaTemplate<String, String> KafkaTemplate() {
-        return new KafkaTemplate<>(kafkaProducerFactory());
+    public KafkaTemplate<String, String> kafkaTemplate() {
+        return new KafkaTemplate<>(paymentStatusProducerFactory());
     }
 }
-

@@ -1,5 +1,7 @@
-package com.nom.restaurant_service.kafka;
+package com.nom.restaurant_service.kafka.producer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nom.restaurant_service.DTO.OrderConfirmedDTO;
 import com.nom.restaurant_service.DTO.OrderDTO;
 import com.nom.restaurant_service.DTO.OrderItemDTO;
@@ -24,7 +26,7 @@ public class KafkaProducerService {
     private static final String TOPIC_ORDER_CONFIRMED = "order_confirmed";
 
     @Autowired
-    private KafkaTemplate<String, OrderConfirmedDTO> kafkaTemplate;
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
     private MenuItemRepository menuItemRepository;
@@ -32,18 +34,21 @@ public class KafkaProducerService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    public void sendOrderConfirmedMessage(OrderDTO orderDTO) {
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    public void sendOrderConfirmedMessage(OrderDTO orderDTO) throws JsonProcessingException {
         OrderConfirmedDTO confirmedDTO = new OrderConfirmedDTO();
         confirmedDTO.setId(orderDTO.getOrderId());
 
         if (orderDTO.getRestaurantId() != null && restaurantRepository.existsById(orderDTO.getRestaurantId())) {
             boolean allItemsAvailable = processOrderItems(orderDTO.getItems(), orderDTO.getRestaurantId());
-            confirmedDTO.setStatus(allItemsAvailable ? OrderStatus.CONFIRMED : OrderStatus.CANCELLED);
+            confirmedDTO.setStatus(allItemsAvailable ? OrderStatus.CONFIRMED : OrderStatus.REJECTED);
         } else {
             confirmedDTO.setStatus(OrderStatus.CANCELLED);
         }
-
-        kafkaTemplate.send(TOPIC_ORDER_CONFIRMED, confirmedDTO);
+        String jsonPayload = objectMapper.writeValueAsString(confirmedDTO);
+        kafkaTemplate.send(TOPIC_ORDER_CONFIRMED, jsonPayload);
         log.info("Sent order confirmation with status: " + confirmedDTO.getStatus());
     }
 

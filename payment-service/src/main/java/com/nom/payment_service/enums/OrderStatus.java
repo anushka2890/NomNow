@@ -1,4 +1,4 @@
-package com.nom.order_service.enums;
+package com.nom.payment_service.enums;
 
 public enum OrderStatus {
     PENDING,

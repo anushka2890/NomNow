@@ -7,6 +7,7 @@ import com.nom.order_service.DTO.OrderRequestDTO;
 import com.nom.order_service.DTO.OrderResponseDTO;
 import com.nom.order_service.enums.OrderStatus;
 import com.nom.order_service.exception.OrderNotFound;
+import com.nom.order_service.kafka.producer.RestaurantRequestProducer;
 import com.nom.order_service.mapper.OrderMapper;
 import com.nom.order_service.model.Order;
 import com.nom.order_service.model.OrderItem;
@@ -28,12 +29,7 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
-    private ObjectMapper objectMapper;
-
-    private static final String TOPIC = "order_placed";
-
-    @Autowired
-    private KafkaTemplate kafkaTemplate;
+    private RestaurantRequestProducer restaurantRequestProducer;
 
     public OrderResponseDTO placeOrder(OrderRequestDTO orderRequestDTO) throws JsonProcessingException {
         log.info("Placing new order for userId={} with {} items", orderRequestDTO.getUserId(), orderRequestDTO.getItems().size());
@@ -56,9 +52,7 @@ public class OrderService {
 
         Order savedOrder = orderRepository.save(order);
         OrderResponseDTO kafkaMessage = OrderMapper.toDTO(savedOrder);
-        // Serialize saved order and publish event to Kafka
-        String orderJson = objectMapper.writeValueAsString(kafkaMessage);
-        kafkaTemplate.send(TOPIC, orderJson);
+        restaurantRequestProducer.sendRestaurantRequest(kafkaMessage);
 
         log.info("Order placed: {}", savedOrder);
         return OrderMapper.toDTO(savedOrder);
