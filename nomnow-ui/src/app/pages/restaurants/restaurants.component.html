@@ -1,0 +1,16 @@
+<h2>Restaurants</h2>
+<ul>
+  <li *ngFor="let restaurant of restaurants">
+    <h3>{{ restaurant.name }}</h3>
+    <p>address : {{restaurant.address}}</p>
+    <p>Rating: {{ restaurant.rating }}</p>
+    <h4>Menu</h4>
+    <ul>
+      <li *ngFor="let item of restaurant.menuItems">
+        <strong>{{ item.name }}</strong> - ₹{{ item.price }}
+        <p>{{ item.description }}</p>
+        <p>Available: {{ item.availableQuantity }}</p>
+      </li>
+    </ul>
+  </li>
+</ul>
