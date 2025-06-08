@@ -1,0 +1,25 @@
+<div class="modal-overlay" *ngIf="show">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>{{ restaurantName }} Menu</h2>
+      <button class="close-btn" (click)="close.emit()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="menuItems.length === 0" class="empty-message">
+        No menu items available.
+      </div>
+      <ul class="menu-list" *ngIf="menuItems.length > 0">
+        <li *ngFor="let item of menuItems" class="menu-item">
+          <div class="item-info">
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.description }}</p>
+            <button (click)="addToCart(item)">Add to Cart</button>
+          </div>
+          <div class="item-meta">
+            ₹{{ item.price.toFixed(2) }}
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
