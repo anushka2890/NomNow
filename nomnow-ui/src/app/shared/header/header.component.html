@@ -1,0 +1,9 @@
+<header class="header">
+  <div class="logo">NomNow 🍽️</div>
+  <nav class="nav">
+    <a routerLink="/" routerLinkActive="active">Home</a>
+    <a routerLink="/restaurants" routerLinkActive="active">Restaurants</a>
+    <button (click)="toggleCart()" class="cart-button">🛒</button>
+    <app-cart-sidebar *ngIf="isCartVisible" (close)="toggleCart()"></app-cart-sidebar>
+  </nav>
+</header>
