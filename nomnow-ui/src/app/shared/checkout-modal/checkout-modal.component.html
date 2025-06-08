@@ -1,0 +1,24 @@
+<div class="modal">
+  <h2>Checkout</h2>
+
+  <!-- Address input -->
+  <label for="address">Delivery Address:</label>
+  <input id="address" type="text" [(ngModel)]="address" placeholder="Enter your address" />
+
+  <!-- Cart item list -->
+  <div class="cart-items">
+    <div *ngFor="let item of cartItems">
+      {{ item.name }} x {{ item.quantity }} — ₹{{ item.price * item.quantity }}
+    </div>
+  </div>
+
+  <p><strong>Total:</strong> ₹{{ totalPrice }}</p>
+
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+
+  <button (click)="onConfirm()">Confirm Order</button>
+  <button (click)="onClose()" [disabled]="isLoading">Cancel</button>
+
+  <div *ngIf="isLoading" class="loading">Placing order...</div>
+</div>
