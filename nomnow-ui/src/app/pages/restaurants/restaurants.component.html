@@ -1,16 +1,36 @@
-<h2>Restaurants</h2>
-<ul>
-  <li *ngFor="let restaurant of restaurants">
-    <h3>{{ restaurant.name }}</h3>
-    <p>address : {{restaurant.address}}</p>
-    <p>Rating: {{ restaurant.rating }}</p>
-    <h4>Menu</h4>
-    <ul>
-      <li *ngFor="let item of restaurant.menuItems">
-        <strong>{{ item.name }}</strong> - ₹{{ item.price }}
-        <p>{{ item.description }}</p>
-        <p>Available: {{ item.availableQuantity }}</p>
-      </li>
-    </ul>
-  </li>
-</ul>
+<h2 class="page-title">Explore Restaurants</h2>
+<div class="search-bar-container">
+  <input
+    type="text"
+    placeholder="Search restaurants by name..."
+    [(ngModel)]="searchQuery"
+    (input)="filterRestaurants()"
+    class="search-input"
+  />
+<div class="restaurant-list-container">
+  <div *ngIf="loading" class="flex justify-center items-center h-64">
+    <div class="loader"></div>
+  </div>
+
+  <div *ngIf="!loading">
+    <div class="restaurant-grid">
+      <div
+        class="restaurant-card"
+        *ngFor="let restaurant of filteredRestaurants"
+        (click)="viewMenu(restaurant)"
+      >
+        <h2>{{ restaurant.name }}</h2>
+        <p>{{ restaurant.address }}</p>
+        <p>⭐ {{ restaurant.rating }}</p>
+        <button (click)="viewMenu(restaurant); $event.stopPropagation()">View Menu</button>
+      </div>
+    </div>
+
+    <app-menu-modal
+      [menuItems]="selectedMenu"
+      [restaurantName]="selectedRestaurant"
+      [show]="showModal"
+      (close)="closeModal()"
+    ></app-menu-modal>
+  </div>
+</div>
