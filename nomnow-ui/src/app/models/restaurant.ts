@@ -1,9 +1,9 @@
 export interface Restaurant {
   id: number;
-    name: string;
-    address: string;
-    rating: number;
-    menuItems: MenuItem[];
+  name: string;
+  address: string;
+  rating: number;
+  menuItems: MenuItem[];
 }
 
 export interface MenuItem {

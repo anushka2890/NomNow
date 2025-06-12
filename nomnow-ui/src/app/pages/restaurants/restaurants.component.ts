@@ -20,6 +20,7 @@ export class RestaurantsComponent implements OnInit {
   loading = true;
   searchQuery : string = '';
   filteredRestaurants: Restaurant[] = [];
+  selectedRestaurantId: number = 1; // Default restaurant
 
   constructor(private restaurantService: RestaurantService) {}
 
@@ -47,6 +48,7 @@ export class RestaurantsComponent implements OnInit {
     viewMenu(restaurant: Restaurant) {
       this.selectedMenu = restaurant.menuItems;
       this.selectedRestaurant = restaurant.name;
+      this.selectedRestaurantId = restaurant.id;
       this.showModal = true;
     }
 

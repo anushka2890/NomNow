@@ -1,24 +1,35 @@
-<div class="modal">
-  <h2>Checkout</h2>
+<div class="checkout-modal-container">
+  <h2>Confirm Your Order</h2>
 
-  <!-- Address input -->
-  <label for="address">Delivery Address:</label>
-  <input id="address" type="text" [(ngModel)]="address" placeholder="Enter your address" />
-
-  <!-- Cart item list -->
-  <div class="cart-items">
-    <div *ngFor="let item of cartItems">
-      {{ item.name }} x {{ item.quantity }} — ₹{{ item.price * item.quantity }}
+  <form (ngSubmit)="onConfirm()" *ngIf="!isLoading">
+    <div class="form-group">
+      <label for="address">Delivery Address</label>
+      <textarea
+        id="address"
+        [(ngModel)]="address"
+        name="address"
+        required
+        placeholder="Enter your full delivery address"
+        rows="3"
+      ></textarea>
     </div>
+
+    <div class="summary">
+      <p><strong>Total Items:</strong> {{ cartItems.length }}</p>
+      <p><strong>Total Price:</strong> ₹{{ totalPrice }}</p>
+    </div>
+
+    <div class="buttons">
+      <button type="submit" class="confirm-btn">Place Order</button>
+      <button type="button" class="cancel-btn" (click)="onClose()">Cancel</button>
+    </div>
+
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+  </form>
+
+  <div *ngIf="isLoading" class="loading-indicator">
+    <p>Placing your order...</p>
+    <mat-progress-spinner diameter="30" mode="indeterminate"></mat-progress-spinner>
   </div>
-
-  <p><strong>Total:</strong> ₹{{ totalPrice }}</p>
-
-  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
-
-  <button (click)="onConfirm()">Confirm Order</button>
-  <button (click)="onClose()" [disabled]="isLoading">Cancel</button>
-
-  <div *ngIf="isLoading" class="loading">Placing order...</div>
 </div>

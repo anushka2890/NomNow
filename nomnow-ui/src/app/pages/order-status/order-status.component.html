@@ -1,1 +1,30 @@
-<p>order-status works!</p>
+<div *ngIf="order; else loading" class="order-status-container">
+
+  <h2>Order #{{ order?.orderId }}</h2>
+  <p><strong>Status:</strong> {{ (order?.status ?? '').replace('_', ' ') }}</p>
+  <p><strong>Order Time:</strong> {{ order?.orderTime | date:'medium' }}</p>
+  <p><strong>Delivery Address:</strong> {{ order?.deliveryAddress }}</p>
+
+  <h3>Items:</h3>
+  <ul>
+    <li *ngFor="let item of order.items">
+      Product ID: {{ item?.productId }}, Quantity: {{ item?.quantity }}
+    </li>
+  </ul>
+
+  <p><strong>Restaurant ID:</strong> {{ order?.restaurantId }}</p>
+
+  <div class="status-steps">
+    <div [class.active]="order?.status === 'ORDER_PLACED' || order?.status === 'PENDING'">Order Placed</div>
+    <div [class.active]="order?.status === 'ORDER_CONFIRMED' || order?.status === 'PAYMENT_SUCCESS'">Confirmed</div>
+    <div [class.active]="order?.status === 'PAYMENT_SUCCESS'">Payment Successful</div>
+    <div [class.failed]="order?.status === 'PAYMENT_FAILED'">Payment Failed</div>
+    <div [class.cancelled]="order?.status === 'CANCELLED'">Cancelled</div>
+  </div>
+
+
+</div>
+
+<ng-template #loading>
+  <p>Loading order status...</p>
+</ng-template>

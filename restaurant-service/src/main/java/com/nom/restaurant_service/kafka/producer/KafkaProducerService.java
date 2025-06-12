@@ -58,7 +58,8 @@ public class KafkaProducerService {
         for (OrderItemDTO item : orderItems) {
             Optional<MenuItem> menuItemOpt = menuItemRepository.findByIdAndRestaurant_Id(item.getProductId(), restaurantId);
             if (menuItemOpt.isEmpty()) {
-                return false; // Menu item doesn't exist in this restaurant
+                log.warn("Menu item with productId={} not found for restaurantId={}", item.getProductId(), restaurantId);
+                return false;
             }
             MenuItem menuItem = menuItemOpt.get();
 
@@ -66,7 +67,9 @@ public class KafkaProducerService {
             int orderedQuantity = item.getQuantity();
 
             if (availableQuantity < orderedQuantity) {
-                return false; // Not enough stock
+                log.warn("Insufficient quantity for productId={} in restaurantId={}. Available={}, Ordered={}",
+                        item.getProductId(), restaurantId, availableQuantity, orderedQuantity);
+                return false;
             }
 
             // Reduce stock

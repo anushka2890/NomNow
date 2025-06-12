@@ -33,7 +33,7 @@ public class PaymentStatusConsumer {
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
             if (paymentStatus.getStatus().equals(PaymentStatus.SUCCESS)){
-                order.setOrderStatus(OrderStatus.PAID);
+                order.setOrderStatus(OrderStatus.PAYMENT_SUCCESS);
             }else{
                 order.setOrderStatus(OrderStatus.PAYMENT_FAILED);
             }

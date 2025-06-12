@@ -11,18 +11,22 @@ import { MenuItem } from '../../models/restaurant';
 })
 export class MenuModalComponent {
   @Input() menuItems: MenuItem[] = [];
-  @Input() restaurantName = '';
+  @Input() restaurantName: string = '';
+  @Input() restaurantId!: number;
   @Input() show = false;
   @Output() close = new EventEmitter<void>();
 
   constructor(private cartService: CartService) {}
 
   addToCart(item: MenuItem) {
-    this.cartService.addToCart({
+    const cartItem: CartItem = {
       id: item.id,
       name: item.name,
       price: item.price,
-      quantity: 1
-    });
+      quantity: 1,
+      restaurantId: this.restaurantId
+    };
+    this.cartService.addToCart(cartItem);
+    this.cartService.setRestaurantId(this.restaurantId);
   }
 }

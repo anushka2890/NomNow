@@ -11,4 +11,12 @@ export const routes: Routes = [
     { path: 'order', component: PlaceOrderComponent },
     { path: 'payment', component: PaymentComponent },
     { path: 'status', component: OrderStatusComponent },
+    {
+      path: 'cart',
+      loadComponent: () => import('./pages/cart/cart.component').then(m => m.CartComponent)
+    },
+    {
+      path: 'order-status/:id',
+      loadComponent: () => import('./pages/order-status/order-status.component').then(m => m.OrderStatusComponent)
+    },
 ];

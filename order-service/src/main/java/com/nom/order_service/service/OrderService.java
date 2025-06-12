@@ -59,13 +59,13 @@ public class OrderService {
     }
 
 
-    public Order getOrderById(Long orderId) {
+    public OrderResponseDTO getOrderById(Long orderId) {
         log.info("Fetching order with ID={}", orderId);
-        return orderRepository.findById(orderId)
+        return OrderMapper.toDTO(orderRepository.findById(orderId)
                 .orElseThrow(() -> {
                     log.warn("Order not found with ID={}", orderId);
                     return new OrderNotFound("Order not found with ID: " + orderId);
-                });
+                }));
     }
 
     public List<OrderResponseDTO> getOrdersByUserId(Long userId) {
