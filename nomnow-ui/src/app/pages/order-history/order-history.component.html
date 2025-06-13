@@ -1,0 +1,22 @@
+<h2>Order History</h2>
+
+<div *ngIf="loading">Loading...</div>
+<div *ngIf="error">{{ error }}</div>
+
+<div *ngIf="!loading && orders.length === 0">No past orders found.</div>
+
+<div *ngIf="orders.length > 0">
+  <div *ngFor="let order of orders" class="order-card">
+    <p><strong>Order #{{ order.orderId }}</strong></p>
+    <p>Status: {{ order.status }}</p>
+    <p>Address: {{ order.deliveryAddress }}</p>
+    <p>Time: {{ order.orderTime | date:'short' }}</p>
+    <p>Items:</p>
+    <ul>
+      <li *ngFor="let item of order.items">
+        Product ID: {{ item.productId }}, Quantity: {{ item.quantity }}
+      </li>
+    </ul>
+    <hr />
+  </div>
+</div>

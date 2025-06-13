@@ -3,21 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Subscription, interval } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-
-interface OrderItem {
-  productId: number;
-  quantity: number;
-}
-
-export interface OrderResponse {
-  orderId: number;
-  status: string;
-  items: OrderItem[];
-  deliveryAddress: string;
-  orderTime: string;
-  restaurantId: number;
-}
-
+import { OrderResponse } from '../../models/OrderResponse.model';
 
 @Component({
   selector: 'app-order-status',

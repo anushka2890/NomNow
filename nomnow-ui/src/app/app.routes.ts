@@ -19,4 +19,13 @@ export const routes: Routes = [
       path: 'order-status/:id',
       loadComponent: () => import('./pages/order-status/order-status.component').then(m => m.OrderStatusComponent)
     },
+    {
+      path: 'profile',
+      loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent)
+    },
+    {
+      path: 'order-history',
+      loadComponent: () =>
+        import('./pages/order-history/order-history.component').then(m => m.OrderHistoryComponent)
+    },
 ];

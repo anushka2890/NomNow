@@ -6,15 +6,7 @@ import { CartItem, CartService } from '../../services/cart.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
-export interface OrderResponse {
-  orderId: number;
-  status: string;
-  items: { productId: number; quantity: number }[];
-  deliveryAddress: string;
-  orderTime: string;
-  restaurantId: number;
-}
+import { OrderResponse } from '../../models/OrderResponse.model';
 
 @Component({
   selector: 'app-checkout-modal',
