@@ -1,0 +1,58 @@
+server:
+  port:8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        # === Public routes ===
+
+        # Restaurant Service (Browse restaurants and menu - public)
+        - id: restaurant-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/rest/**
+
+        # User Service (Public registration/login)
+        - id: user-service-public
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/users/register, /api/users/login
+
+        # Auth Service (Public)
+        - id: auth-service
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/auth/**
+
+        # === Protected routes ===
+
+        # User Service (view profile, etc.)
+        - id: user-service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - JwtAuthFilter
+
+        # Order Service (placing/viewing orders)
+        - id: order-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/orders/**
+          filters:
+            - JwtAuthFilter
+
+        # Payment Service
+        - id: payment-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/payments/**
+          filters:
+            - JwtAuthFilter
+
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
