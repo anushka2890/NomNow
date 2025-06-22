@@ -1,8 +1,28 @@
-<nav>
-  <a routerLink="/">Home</a> |
-  <a routerLink="/restaurants">Restaurants</a> |
-  <a routerLink="/order">Place Order</a> |
-  <a routerLink="/payment">Payment</a> |
-  <a routerLink="/status">Order Status</a>
+<nav class="navbar">
+  <!-- Left: Logo -->
+  <div class="navbar-left">
+    <span class="brand-name">NomNow</span>
+  </div>
+
+  <!-- Center: Nav Links -->
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Browse Menu</a></li>
+    <li><a href="#">Special Offers</a></li>
+    <li><a href="#">Restaurants</a></li>
+    <li><a href="#">Track Order</a></li>
+  </ul>
+
+  <!-- Right: Cart + Currency + Login -->
+  <div class="navbar-right">
+    <div class="cart-icon">
+      <span class="cart-emoji">🛒</span>
+      <span class="cart-count">3</span>
+    </div>
+
+    <span class="currency">₹ 789.89</span>
+
+    <button class="login-btn">Login / Signup</button>
+  </div>
 </nav>
 <hr>
