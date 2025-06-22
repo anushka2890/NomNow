@@ -1,0 +1,9 @@
+<section class="featured-restaurants">
+  <h2 class="section-title">Popular Restaurants 🍔</h2>
+
+  <div class="restaurant-logos">
+    <div class="restaurant-card" *ngFor="let restaurant of restaurants">
+      <img [src]="restaurant.logo" [alt]="restaurant.name" />
+    </div>
+  </div>
+</section>
