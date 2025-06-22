@@ -8,10 +8,11 @@ import { HeroComponent } from "./sections/hero/hero.component";
 import { CategoryStripComponent } from './sections/category-strip/category-strip.component';
 import { FeaturedRestaurantsComponent } from './sections/featured-restaurants/featured-restaurants.component';
 import { ExclusiveDealsComponent } from "./sections/exclusive-deals/exclusive-deals.component";
+import { HowItWorksComponent } from "./sections/how-it-works/how-it-works.component";
 @Component({
   selector: 'app-root',
   standalone: true, // this is the trick: this component is standalone
-  imports: [RouterModule, HttpClientModule, HeaderComponent, MatSnackBarModule, NavbarComponent, HeroComponent, CategoryStripComponent, FeaturedRestaurantsComponent, ExclusiveDealsComponent],
+  imports: [RouterModule, HttpClientModule, HeaderComponent, MatSnackBarModule, NavbarComponent, HeroComponent, CategoryStripComponent, FeaturedRestaurantsComponent, ExclusiveDealsComponent, HowItWorksComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })

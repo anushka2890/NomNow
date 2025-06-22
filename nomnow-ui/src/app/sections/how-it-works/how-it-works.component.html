@@ -1,0 +1,11 @@
+<section class="how-it-works">
+  <h2 class="section-title">How It Works 🧾</h2>
+
+  <div class="steps-container">
+    <div class="step-card" *ngFor="let step of steps">
+      <img [src]="step.icon" [alt]="step.title" />
+      <h3>{{ step.title }}</h3>
+      <p>{{ step.description }}</p>
+    </div>
+  </div>
+</section>
