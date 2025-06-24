@@ -17,9 +17,18 @@ public class Restaurant {
     private String name;
     private String address;
     private Double rating;
+    private String imageUrl;
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<MenuItem> menuItems = new ArrayList<>();
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public Long getId() {
         return id;

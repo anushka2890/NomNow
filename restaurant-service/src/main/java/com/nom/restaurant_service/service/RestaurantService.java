@@ -42,11 +42,14 @@ public class RestaurantService {
         return restaurantRepository.findById(id).map(existingRestaurant -> {
             existingRestaurant.setName(updatedRestaurant.getName());
             existingRestaurant.setAddress(updatedRestaurant.getAddress());
-            for (MenuItem item : updatedRestaurant.getMenuItems()) {
-                item.setRestaurant(existingRestaurant); // maintain bidirectional link
-                existingRestaurant.getMenuItems().add(item);
-            }
             existingRestaurant.setRating(updatedRestaurant.getRating());
+            existingRestaurant.setImageUrl(updatedRestaurant.getImageUrl());
+            if (updatedRestaurant.getMenuItems() != null && !updatedRestaurant.getMenuItems().isEmpty()) {
+                for (MenuItem item : updatedRestaurant.getMenuItems()) {
+                    item.setRestaurant(existingRestaurant); // maintain bidirectional link
+                    existingRestaurant.getMenuItems().add(item);
+                }
+            }
             return restaurantRepository.save(existingRestaurant);
         }).orElseThrow(() -> new RuntimeException("Restaurant not found with id: " + id));
     }

@@ -1,5 +1,6 @@
 package com.nom.restaurant_service.service;
 
+import com.nom.restaurant_service.DTO.MenuItemDTO;
 import com.nom.restaurant_service.model.MenuItem;
 import com.nom.restaurant_service.model.Restaurant;
 import com.nom.restaurant_service.repository.MenuItemRepository;
@@ -31,5 +32,11 @@ public class MenuItemService {
 
     public void deleteMenuItem(Long id) {
         menuItemRepository.deleteById(id);
+    }
+
+    public MenuItemDTO getMenuItemById(Long itemId) {
+        MenuItem menuItem = menuItemRepository.findById(itemId).orElse(null);
+        assert menuItem != null;
+        return new MenuItemDTO(menuItem.getId(), menuItem.getName(), menuItem.getDescription(), menuItem.getPrice(), menuItem.getAvailableQuantity(), menuItem.getImageUrl(), menuItem.getCategory());
     }
 }

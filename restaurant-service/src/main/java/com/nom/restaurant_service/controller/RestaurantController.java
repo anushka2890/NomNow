@@ -1,5 +1,6 @@
 package com.nom.restaurant_service.controller;
 
+import com.nom.restaurant_service.DTO.RestaurantDTO;
 import com.nom.restaurant_service.model.Restaurant;
 import com.nom.restaurant_service.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/rest")
@@ -29,13 +31,18 @@ public class RestaurantController {
     @Operation(summary = "find restaurant by id")
     public ResponseEntity<Restaurant> findRestaurantById(@PathVariable Long id){
         Restaurant restaurant = restaurantService.findRestaurantById(id);
+
         return ResponseEntity.ok(restaurant);
     }
 
     @GetMapping
     @Operation(summary = "get all restaurants")
-    public ResponseEntity<List<Restaurant>> getAllRestaurants() {
-        return ResponseEntity.ok(restaurantService.getAllRestaurants());
+    public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
+        List<RestaurantDTO> dtos = restaurantService.getAllRestaurants()
+                .stream()
+                .map(r -> new RestaurantDTO(r.getId(), r.getName(), r.getAddress(), r.getRating(), r.getImageUrl()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @DeleteMapping("/{id}")

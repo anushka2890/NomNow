@@ -1,14 +1,6 @@
-package com.nom.restaurant_service.model;
+package com.nom.restaurant_service.DTO;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-import lombok.Data;
-
-@Entity
-@Table(name = "menu_item")
-public class MenuItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class MenuItemDTO {
     private Long id;
     private String name;
     private String description;
@@ -16,25 +8,17 @@ public class MenuItem {
     private int availableQuantity;
     private String imageUrl;
     private String category;
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id")
-    @JsonBackReference
-    private Restaurant restaurant;
 
-    public String getCategory() {
-        return category;
-    }
+    public MenuItemDTO() {}
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
+    public MenuItemDTO(Long id, String name, String description, Double price, int availableQuantity, String imageUrl, String category) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.availableQuantity = availableQuantity;
         this.imageUrl = imageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -75,13 +59,5 @@ public class MenuItem {
 
     public void setAvailableQuantity(int availableQuantity) {
         this.availableQuantity = availableQuantity;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
     }
 }
