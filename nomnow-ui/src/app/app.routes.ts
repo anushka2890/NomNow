@@ -1,14 +1,18 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
-import { RestaurantsComponent } from './pages/restaurants/restaurants.component';
+// import { RestaurantsComponent } from './pages/restaurants/restaurants.component';
 import { PlaceOrderComponent } from './pages/place-order/place-order.component';
 import { PaymentComponent } from './pages/payment/payment.component';
 import { OrderStatusComponent } from './pages/order-status/order-status.component';
+import { RestaurantListComponent } from './pages/restaurant-list/restaurant-list.component';
+import { RestaurantDetailComponent } from './pages/restaurant-detail/restaurant-detail.component';
+import { LoginModalComponent } from './auth/login-modal/login-modal.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
-    { path: 'restaurants', component: RestaurantsComponent },
+    { path: 'restaurants', component: RestaurantListComponent },
     { path: 'order', component: PlaceOrderComponent },
+    { path: 'restaurant/:id', component: RestaurantDetailComponent },
     { path: 'payment', component: PaymentComponent },
     { path: 'status', component: OrderStatusComponent },
     {
@@ -24,4 +28,5 @@ export const routes: Routes = [
       loadComponent: () =>
         import('./pages/order-history/order-history.component').then(m => m.OrderHistoryComponent)
     },
+    { path: 'login', component: LoginModalComponent },
 ];
