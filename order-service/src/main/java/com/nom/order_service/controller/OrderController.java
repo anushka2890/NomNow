@@ -7,6 +7,7 @@ import com.nom.order_service.DTO.UpdateStatusRequest;
 import com.nom.order_service.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -63,5 +64,12 @@ public class OrderController {
     @Operation(summary = "Cancel order")
     public ResponseEntity<OrderResponseDTO> cancelOrder(@PathVariable Long orderId) {
         return ResponseEntity.ok(orderService.cancelOrder(orderId));
+    }
+
+    @GetMapping("/test")
+    public String testGateway(HttpServletRequest request) {
+        String fromGateway = request.getHeader("X-From-Gateway");
+        System.out.println("🔍 Was request from API Gateway? => " + fromGateway);
+        return "Order service reached. From gateway: " + fromGateway;
     }
 }
