@@ -1,0 +1,29 @@
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  gap: 12px;
+}
+
+.cancel-btn {
+  flex: 1;
+  font-weight: 500;
+  color: #444;
+  border-color: #ccc;
+  height: 40px;
+  border-radius: 20px;
+}
+
+.submit-btn {
+  flex: 1;
+  font-weight: 600;
+  background-color: #ff5722;
+  color: white;
+  height: 40px;
+  border-radius: 20px;
+}
+
+.submit-btn:hover {
+  background-color: #e64a19;
+}
