@@ -23,6 +23,9 @@ public class GatewayConfig {
                 .route("auth-service", r -> r.path("/api/auth/**")
                         .filters(f -> f.filter(jwtAuthFilter))
                         .uri("http://localhost:8085"))
+//                .route("restaurant-service", r -> r.path("/api/rest/**")
+//                        .filters(f->f.filter(jwtAuthFilter))
+//                        .uri("http://localhost:8082"))
                 .build();
     }
 }
