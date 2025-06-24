@@ -1,28 +1,69 @@
-<div class="profile-container" *ngIf="user">
-  <h2>User Profile</h2>
-
-  <div class="form-group">
-    <label>Name:</label>
-    <input *ngIf="editMode" [(ngModel)]="user.name" />
-    <span *ngIf="!editMode">{{ user.name }}</span>
+<div class="profile-wrapper" *ngIf="user">
+  <!-- Profile Banner -->
+  <div class="profile-banner">
+    <div class="avatar">{{ user.name.charAt(0).toUpperCase() }}</div>
+    <div class="user-details">
+      <h2>{{ user.name }}</h2>
+      <p>{{ user.email }}</p>
+    </div>
   </div>
 
-  <div class="form-group">
-    <label>Email:</label>
-    <input *ngIf="editMode" [(ngModel)]="user.email" />
-    <span *ngIf="!editMode">{{ user.email }}</span>
+  <!-- Personal Info -->
+  <div class="info-section">
+    <h3>Personal Information</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="label">📧 Email:</span>
+        <span>{{ user.email }}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">📞 Phone:</span>
+        <span>{{ user.phone }}</span>
+      </div>
+      <div class="info-item">
+        <span class="label">🏠 Address:</span>
+        <span>{{ user.name }}</span>
+      </div>
+    </div>
   </div>
 
-  <div class="form-group">
-    <label>Phone:</label>
-    <textarea *ngIf="editMode" [(ngModel)]="user.phone"></textarea>
-    <span *ngIf="!editMode">{{ user.phone }}</span>
-  </div>
+  <!-- Order History -->
+  <div class="order-section" *ngIf="!loading">
+    <h2>Order History</h2>
 
-  <button (click)="editMode ? onSaveChanges() : toggleEdit()">
-    {{ editMode ? 'Save' : 'Edit' }}
-  </button>
-  <button (click)="goToOrderHistory()" class="order-history-btn">
-    View Order History
-  </button>
+    <div class="orders" *ngIf="enrichedOrders.length > 0; else noOrders">
+      <div class="order-card" *ngFor="let order of enrichedOrders">
+        <div class="order-header">
+          <div>
+            <strong>{{ order.restaurantName }}</strong>
+            <span class="order-id">Order ID: {{ order.orderId }}</span>
+          </div>
+          <span class="status"
+                [ngClass]="{
+                  'delivered': order.status === 'PAYMENT_SUCCESS'
+                }">
+            {{ order.status }}
+          </span>
+        </div>
+
+        <div class="order-meta">
+          <p><strong>Ordered At:</strong> {{ order.orderTime | date:'medium' }}</p>
+        </div>
+
+        <div class="order-meta" style="margin-top: 8px;">
+          <strong>Items:</strong>
+          <ul>
+            <li *ngFor="let item of order.items">
+              {{ item.name }} (x{{ item.quantity }})
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noOrders>
+      <p style="color: #999;">You have not placed any orders yet.</p>
+    </ng-template>
+
+  </div>
 </div>

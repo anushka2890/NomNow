@@ -1,40 +1,106 @@
-.profile-container {
-  max-width: 400px;
-  margin: auto;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f5f5f5;
+.profile-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-.form-group {
-  margin-bottom: 1rem;
+.profile-banner {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
 }
 
-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 0.3rem;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 0.4rem;
-  font-size: 1rem;
-}
-button {
-  margin-top: 20px;
-  padding: 10px 16px;
-  font-size: 16px;
-  background-color: #1976d2;
+.avatar {
+  width: 72px;
+  height: 72px;
+  background-color: #ff7043;
   color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  font-size: 28px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-right: 20px;
 }
 
-.order-history-btn:hover {
-  background-color: #1565c0;
+.user-details h2 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.user-details p {
+  margin: 4px 0;
+  color: #666;
+}
+
+.info-section,
+.order-section {
+  margin-bottom: 40px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.info-item {
+  padding: 12px;
+  background: #f8f8f8;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.label {
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+.orders {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.order-card {
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background: #fcfcfc;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-meta {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.order-id {
+  display: block;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  background: #ffe0b2;
+  color: #ef6c00;
+}
+
+.status.delivered {
+  background: #c8e6c9;
+  color: #2e7d32;
 }
