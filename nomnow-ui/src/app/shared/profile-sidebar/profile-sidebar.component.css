@@ -1,0 +1,75 @@
+.profile-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 260px;
+  height: 100vh;
+  background-color: #fff;
+  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
+  padding: 24px 20px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease-out;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  margin-bottom: 18px;
+}
+
+.menu a {
+  text-decoration: none;
+  font-size: 1.05rem;
+  color: #333;
+  display: block;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.menu a:hover {
+  background-color: #f4f4f4;
+  color: #ef6c00;
+}
