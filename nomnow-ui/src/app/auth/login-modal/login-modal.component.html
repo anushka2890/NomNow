@@ -1,0 +1,33 @@
+<app-auth-modal-wrapper [bannerImageUrl]="'https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=800&q=60'">
+
+  <h2>Login to NomNow</h2>
+
+  <form [formGroup]="loginForm">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password" />
+    </mat-form-field>
+
+<div class="actions">
+  <button mat-stroked-button color="basic" mat-dialog-close class="cancel-btn">
+    Cancel
+  </button>
+
+  <button mat-flat-button color="primary" class="submit-btn" (click)="onLogin()">
+    Login
+  </button>
+</div>
+
+
+    <p class="switch-text">
+      Don’t have an account?
+      <a href="#" (click)="openSignup()">Sign up</a>
+    </p>
+  </form>
+
+</app-auth-modal-wrapper>
