@@ -1,12 +1,15 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CartItem, CartService } from '../../services/cart.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { OrderResponse } from '../../models/OrderResponse.model';
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-checkout-modal',
@@ -18,8 +21,10 @@ import { OrderResponse } from '../../models/OrderResponse.model';
 export class CheckoutModalComponent implements OnInit {
   @Input() cartItems: CartItem[] = [];
   @Input() totalPrice: number = 0;
-  @Input() userId: number = 1;
+  
   @Output() close = new EventEmitter<void>();
+
+  userId?: number;
 
   address: string = '';
   isLoading: boolean = false;
@@ -32,11 +37,19 @@ export class CheckoutModalComponent implements OnInit {
     private http: HttpClient,
     private snackBar: MatSnackBar,
     private router: Router,
-    private cartService: CartService
+    private cartService: CartService,
+    private authService: AuthService,
+    private userService: UserService
   ) {}
-
+  
   ngOnInit(): void {
     this.restaurantId = this.cartService.getRestaurantId();
+    const cachedUserId = this.userService.getUserId();
+    if (cachedUserId) {
+      this.userId = cachedUserId;
+    } else {
+      console.error('User ID not set in UserService');
+    }
   }
 
   onClose(): void {
@@ -59,12 +72,19 @@ export class CheckoutModalComponent implements OnInit {
       }))
     };
 
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    });
+
+
     console.log('Placing order with payload:', orderPayload);
     this.isLoading = true;
     this.successMessage = '';
     this.errorMessage = '';
 
-    this.http.post<OrderResponse>('http://localhost:8081/api/orders', orderPayload).subscribe({
+    this.http.post<OrderResponse>(`${environment.apiUrl}/orders`, orderPayload, { headers }).subscribe({
       next: (response) => {
         console.log('Order response:', response);
         this.createdOrderId = response.orderId;
@@ -85,7 +105,7 @@ export class CheckoutModalComponent implements OnInit {
             console.error('Order ID is undefined or null');
           }
         });
-
+        localStorage.setItem('lastOrderId', this.createdOrderId!.toString());
         this.close.emit(); // ✅ Close modal
       },
       error: (error) => {
