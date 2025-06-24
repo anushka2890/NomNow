@@ -137,3 +137,9 @@
 .checkout-btn:hover {
   background-color: #ff4f4f;
 }
+.empty-cart {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  color: #666;
+}

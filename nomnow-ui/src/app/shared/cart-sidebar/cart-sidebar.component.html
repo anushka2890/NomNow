@@ -1,20 +1,23 @@
-<!-- cart-sidebar.component.html -->
 <div class="cart-sidebar">
   <div *ngIf="(cartItems$ | async) as items">
+    
+    <!-- Always show header with Close -->
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button class="close-btn" (click)="onClose()">×</button>
+    </div>
+
+    <!-- If Cart is Empty -->
     <div *ngIf="items.length === 0" class="empty-cart">
       Your cart is empty.
     </div>
 
+    <!-- If Cart has Items -->
     <div *ngIf="items.length > 0">
-      <div class="cart-header">
-        <h3>Your Cart</h3>
-        <button class="close-btn" (click)="onClose()">×</button>
-      </div>
-
       <div class="cart-items">
         <div *ngFor="let item of items; let i = index" class="cart-item">
           <div class="item-info">
-            <div class="item-id">{{item.id}}</div>
+            <div class="item-id">{{ item.id }}</div>
             <div class="item-name">{{ item.name }}</div>
             <div class="item-price">₹{{ item.price }} x {{ item.quantity }}</div>
           </div>
@@ -26,6 +29,7 @@
         <div class="total">
           Total: ₹{{ getTotal(items) }}
         </div>
+
         <!-- Checkout Button -->
         <button class="checkout-btn" (click)="openCheckout()">Checkout</button>
 
@@ -34,10 +38,8 @@
           *ngIf="showCheckoutModal"
           [cartItems]="items"
           [totalPrice]="getTotal(items)"
-          [userId]="1"
           (close)="closeCheckout()"
         ></app-checkout-modal>
-
       </div>
     </div>
   </div>
