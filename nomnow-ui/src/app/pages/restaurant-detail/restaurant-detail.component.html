@@ -1,0 +1,38 @@
+<div class="restaurant-detail-container" *ngIf="restaurant">
+  <!-- Restaurant Banner -->
+  <div class="restaurant-banner">
+    <img [src]="restaurant.imageUrl" alt="Restaurant Banner" />
+    <div class="restaurant-info">
+      <h2>{{ restaurant.name }}</h2>
+      <p>⭐ {{ restaurant.rating }}</p>
+    </div>
+  </div>
+
+  <!-- Main Layout: Category Nav + Menu Items -->
+  <div class="restaurant-layout">
+    <!-- Left Sidebar with Categories -->
+    <aside class="category-sidebar">
+      <ul>
+        <li *ngFor="let category of categoryKeys">
+          <a [href]="'#' + category">{{ category }}</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Right Content with Menu Items Grouped by Category -->
+    <section class="menu-content">
+      <div *ngFor="let category of categoryKeys" [attr.id]="category" class="category-section">
+        <h3>{{ category }}</h3>
+        <div class="menu-grid">
+          <div class="menu-item" *ngFor="let item of groupedMenu[category]">
+            <img [src]="item.imageUrl" alt="{{ item.name }}" />
+            <h4>{{ item.name }}</h4>
+            <p>{{ item.description }}</p>
+            <p>₹{{ item.price }}</p>
+            <button (click)="addToCart(item)">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
