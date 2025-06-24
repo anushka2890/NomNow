@@ -7,22 +7,44 @@
   <!-- Center: Nav Links -->
   <ul class="nav-links">
     <li><a href="#">Home</a></li>
-    <li><a href="#">Browse Menu</a></li>
     <li><a href="#">Special Offers</a></li>
-    <li><a href="#">Restaurants</a></li>
-    <li><a href="#">Track Order</a></li>
+    <li><a routerLink="/restaurants">Restaurants</a></li>
+    <li><a (click)="trackLastOrder()">Track Order</a></li>
   </ul>
 
   <!-- Right: Cart + Currency + Login -->
   <div class="navbar-right">
+    <button class="relative" (click)="openCart()">
     <div class="cart-icon">
       <span class="cart-emoji">🛒</span>
       <span class="cart-count">3</span>
     </div>
+    </button>
 
     <span class="currency">₹ 789.89</span>
 
-    <button class="login-btn">Login / Signup</button>
+    <!-- Show login/signup if not logged in -->
+<ng-container *ngIf="!(isLoggedIn$ | async); else loggedInBlock">
+  <button (click)="openLogin()" class="login-btn">
+    Login / Signup
+  </button>
+</ng-container>
+
+<!-- Show profile icon if logged in -->
+<ng-template #loggedInBlock>
+  <div *ngIf="user" class="profile-button">
+    <div class="user-avatar" (click)="toggleProfileSidebar()">
+      {{ user.name.charAt(0) | uppercase }}
+    </div>
+  </div>
+</ng-template>
+
+
+<app-profile-sidebar
+  [user]="user!"
+  *ngIf="showProfileSidebar"
+  (close)="toggleProfileSidebar()"
+/>
   </div>
 </nav>
 <hr>
