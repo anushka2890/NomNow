@@ -5,12 +5,14 @@ public class UserDTO {
     private String name;
     private String email;
     private String phone;
+    private String address;
 
-    public UserDTO(Long id, String name, String email, String phone) {
+    public UserDTO(Long id, String name, String email, String phone, String address) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
+        this.address = address;
     }
 
     public Long getId() {
@@ -43,5 +45,13 @@ public class UserDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

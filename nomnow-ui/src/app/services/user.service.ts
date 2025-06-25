@@ -5,12 +5,6 @@ import { OrderResponse } from '../models/OrderResponse.model';
 import { UserDTO } from '../models/UserDTO.model';
 import { environment } from '../../environments/environment';
 
-export interface User{
-  id: number,
-  name: string,
-  email: string,
-  phone: string
-}
 @Injectable({
   providedIn: 'root'
 })
@@ -28,7 +22,7 @@ export class UserService {
     return this.userId;
   }
   
-  getUserProfile(): Observable<User> {
+  getUserProfile(): Observable<UserDTO> {
     if (typeof window === 'undefined') {
       // SSR environment — skip localStorage access
       return of(); // or throw error, depending on how you handle fallback
@@ -38,7 +32,7 @@ export class UserService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
-    return this.http.get<User>(`${this.BASE_URL}/profile`, { headers }).pipe(
+    return this.http.get<UserDTO>(`${this.BASE_URL}/profile`, { headers }).pipe(
       tap(user => this.setUserId(user.id))
     );
   }
@@ -48,6 +42,7 @@ export class UserService {
     name: 'Anushka Chauhan',
     email: 'anushka@example.com',
     phone: '9876543210',
+    address: '123 abc street, ny'
   });
 
   getUser(): Observable<UserDTO> {

@@ -100,12 +100,13 @@
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { User, UserService } from '../../services/user.service';
+import { UserService } from '../../services/user.service';
 import { EnrichedOrder } from '../../models/enriched-order-response.model';
 import { RestaurantService } from '../../services/restaurant.service';
 import { OrderResponse } from '../../models/OrderResponse.model';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { UserDTO } from '../../models/UserDTO.model';
 
 @Component({
   selector: 'app-profile',
@@ -114,7 +115,7 @@ import { ActivatedRoute } from '@angular/router';
   imports: [CommonModule]
 })
 export class ProfileComponent implements OnInit {
-  user!: User;
+  user!: UserDTO;
   enrichedOrders: EnrichedOrder[] = [];
   loading: boolean = true;
 

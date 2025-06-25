@@ -7,8 +7,9 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Observable, take } from 'rxjs';
 import { ProfileSidebarComponent } from "../profile-sidebar/profile-sidebar.component";
-import { User, UserService } from '../../services/user.service';
+import { UserService } from '../../services/user.service';
 import { CartItem, CartService } from '../../services/cart.service';
+import { UserDTO } from '../../models/UserDTO.model';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -19,7 +20,7 @@ import { CartItem, CartService } from '../../services/cart.service';
 export class NavbarComponent implements OnInit{
   isLoggedIn$!: Observable<boolean>;
   showProfileSidebar = false;
-  user?: User;
+  user?: UserDTO;
   cartItemCount: number = 0;
   cartTotalPrice : number = 0;
 

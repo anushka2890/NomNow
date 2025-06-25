@@ -17,6 +17,8 @@ public class User {
 
     private String phone;
 
+    private String address;
+
     public User() {
     }
 
@@ -57,5 +59,13 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

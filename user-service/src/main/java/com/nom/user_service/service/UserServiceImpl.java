@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
 
     private UserDTO toDTO(User user) {
-        return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone());
+        return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getAddress());
     }
 
     private User toEntity(UserDTO dto) {

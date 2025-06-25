@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { User } from '../../services/user.service';
+import { UserDTO } from '../../models/UserDTO.model';
 
 @Component({
   selector: 'app-profile-sidebar',
@@ -13,7 +13,7 @@ import { User } from '../../services/user.service';
 })
 export class ProfileSidebarComponent {
 
-  @Input() user!: User; // <-- ADD THIS
+  @Input() user!: UserDTO; // <-- ADD THIS
   @Output() close = new EventEmitter<void>();
 
   constructor(private authService: AuthService, private router: Router) {}
