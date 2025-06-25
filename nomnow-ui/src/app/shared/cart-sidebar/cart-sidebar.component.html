@@ -31,10 +31,31 @@
         </div>
       </div>
 
+      <!-- Promo Code Input -->
+      <div class="promo-code-section">
+        <input
+          type="text"
+          [(ngModel)]="promoCode"
+          placeholder="Enter or select promo code"
+          list="availablePromoCodes"
+        />
+        <datalist id="availablePromoCodes">
+          <option *ngFor="let code of promoCodes" [value]="code"></option>
+        </datalist>
+        <button (click)="applyPromoCode()">Apply</button>
+      </div>
+      <div class="promo-message" *ngIf="promoMessage">{{ promoMessage }}</div>
+
       <div class="cart-footer">
-        <div class="total">
+        <!-- Show discounted total only if promo is applied -->
+        <div class="total" *ngIf="promoApplied">
+          Discounted Total: ₹{{ getDiscountedTotal(items) }}
+        </div>
+        <div class="total" *ngIf="!promoApplied">
           Total: ₹{{ getTotal(items) }}
         </div>
+
+        
 
         <!-- Checkout Button -->
         <button class="checkout-btn" (click)="openCheckout()">Checkout</button>
@@ -43,7 +64,7 @@
         <app-checkout-modal
           *ngIf="showCheckoutModal"
           [cartItems]="items"
-          [totalPrice]="getTotal(items)"
+          [totalPrice]="getDiscountedTotal(items)"
           (close)="closeCheckout()"
         ></app-checkout-modal>
       </div>

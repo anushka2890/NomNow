@@ -226,3 +226,45 @@
   text-align: center;
   font-weight: 500;
 }
+
+.promo-code-section {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.promo-code-section input {
+  flex: 1; /* take up all available space */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+.promo-code-section button {
+  background-color: #ff7f2a;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.promo-code-section button:hover {
+  background-color: #e56600;
+}
+
+.promo-message {
+  color: green;
+  font-size: 13px;
+  margin-top: 6px;
+}
+.promo-code-section select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+}
+
