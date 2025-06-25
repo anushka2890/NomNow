@@ -66,11 +66,15 @@ export class CheckoutModalComponent implements OnInit {
       this.errorMessage = 'Please enter a delivery address.';
       return;
     }
+    const totalAmount = this.cartItems.reduce(
+      (sum, item) => sum + item.price * item.quantity, 0
+    );
 
     const orderPayload = {
       userId: this.userId,
       address: this.address,
       restaurantId: this.restaurantId,
+      totalAmount: totalAmount,
       items: this.cartItems.map(item => ({
         productId: item.id,
         quantity: item.quantity,

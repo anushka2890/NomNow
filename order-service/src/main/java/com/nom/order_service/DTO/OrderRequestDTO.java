@@ -16,6 +16,15 @@ public class OrderRequestDTO {
     private String address;
     @NotNull(message = "Restaurant ID is required")
     private Long restaurantId;
+    private double totalAmount;
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 
     public @NotNull(message = "Restaurant ID is required") Long getRestaurantId() {
         return restaurantId;

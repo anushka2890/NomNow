@@ -13,6 +13,15 @@ public class OrderResponseDTO {
     private LocalDateTime orderTime;
     private Long restaurantId;
     private Long userId;
+    private double totalAmount;
+
+    public double getTotalAmount(){
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double amount){
+        this.totalAmount = amount;
+    }
 
     public Long getUserId() {
         return userId;

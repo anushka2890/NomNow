@@ -9,4 +9,5 @@ export interface EnrichedOrder {
   items: EnrichedOrderItem[];
   restaurantName: string;
   orderTime: string;
+  totalAmount: number;
 }

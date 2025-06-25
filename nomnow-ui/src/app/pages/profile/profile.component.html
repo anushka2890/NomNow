@@ -54,7 +54,10 @@
   <!-- Order History -->
   <div class="order-section" *ngIf="!loading">
     <h2>Order History</h2>
-
+    <div class="order-stats" *ngIf="enrichedOrders.length > 0">
+      <p><strong>Total Orders:</strong> {{ totalOrders }}</p>
+      <p><strong>Total Spent:</strong> ₹{{ totalSpent }}</p>
+    </div>
     <div class="orders" *ngIf="enrichedOrders.length > 0; else noOrders">
       <div class="order-card" *ngFor="let order of enrichedOrders">
         <div class="order-header">

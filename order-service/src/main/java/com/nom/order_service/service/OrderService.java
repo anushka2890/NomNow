@@ -41,6 +41,7 @@ public class OrderService {
         order.setOrderDate(LocalDateTime.now());
         order.setDeliveryAddress(orderRequestDTO.getAddress());
         order.setRestaurantId(orderRequestDTO.getRestaurantId());
+        order.setTotalAmount(orderRequestDTO.getTotalAmount());
 
         // convert DTO items to entity items and add to order
         for (OrderItemDTO itemDTO : orderRequestDTO.getItems()) {

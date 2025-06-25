@@ -10,4 +10,5 @@ export interface OrderResponse {
   deliveryAddress: string;
   orderTime: string;
   restaurantId: number;
+  totalAmount: number;
 }
