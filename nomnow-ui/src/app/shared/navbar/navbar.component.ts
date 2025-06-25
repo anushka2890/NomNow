@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { Observable, take } from 'rxjs';
 import { ProfileSidebarComponent } from "../profile-sidebar/profile-sidebar.component";
 import { User, UserService } from '../../services/user.service';
-import { CartService } from '../../services/cart.service';
+import { CartItem, CartService } from '../../services/cart.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -21,6 +21,7 @@ export class NavbarComponent implements OnInit{
   showProfileSidebar = false;
   user?: User;
   cartItemCount: number = 0;
+  cartTotalPrice : number = 0;
 
   constructor(private dialog: MatDialog
     , private cartUiService: CartUiService
@@ -30,11 +31,12 @@ export class NavbarComponent implements OnInit{
     , private cartService: CartService ) {}
 
   ngOnInit(): void {
-
     this.cartService.getCart().subscribe(items => {
       this.cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
     });
     
+    this.cartService.getCartTotal().subscribe(total => this.cartTotalPrice = total);
+
     this.isLoggedIn$ = this.authService.isLoggedIn$;
     // ✅ Fetch user only if logged in
     this.authService.isLoggedIn$.subscribe((loggedIn) => {
@@ -58,6 +60,7 @@ export class NavbarComponent implements OnInit{
       width: '400px'
     });
   }
+
   openCart() {
     this.cartUiService.open();
   }
@@ -68,19 +71,23 @@ export class NavbarComponent implements OnInit{
   }
 
   trackLastOrder() {
-  this.authService.isLoggedIn$.pipe(take(1)).subscribe(loggedIn => {
-    if (!loggedIn) {
-      alert('Please log in to track your orders.');
-      return;
-    }
+    this.authService.isLoggedIn$.pipe(take(1)).subscribe(loggedIn => {
+      if (!loggedIn) {
+        alert('Please log in to track your orders.');
+        return;
+      }
 
-    const orderId = localStorage.getItem('lastOrderId');
-    if (orderId) {
-      this.router.navigate(['/order-status', orderId]);
-    } else {
-      alert('No recent order found.');
-    }
-  });
-}
+      const orderId = localStorage.getItem('lastOrderId');
+      if (orderId) {
+        this.router.navigate(['/order-status', orderId]);
+      } else {
+        alert('No recent order found.');
+      }
+    });
+  }
+
+  getTotal(items: CartItem[]): number {
+    return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  }
 
 }

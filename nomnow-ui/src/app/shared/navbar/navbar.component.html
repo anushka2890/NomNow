@@ -21,7 +21,7 @@
     </div>
     </button>
 
-    <span class="currency">₹ 789.89</span>
+    <span class="currency">₹ {{cartTotalPrice}}</span>
 
     <!-- Show login/signup if not logged in -->
 <ng-container *ngIf="!(isLoggedIn$ | async); else loggedInBlock">
