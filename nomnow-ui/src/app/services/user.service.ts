@@ -9,6 +9,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class UserService {
+  private loggedInUser?: UserDTO;
   private BASE_URL = `${environment.apiUrl}/users`;
   private userId?: number;
 
@@ -33,20 +34,18 @@ export class UserService {
       Authorization: `Bearer ${token}`
     });
     return this.http.get<UserDTO>(`${this.BASE_URL}/profile`, { headers }).pipe(
-      tap(user => this.setUserId(user.id))
+      tap(user => {this.setUserId(user.id);
+        this.setUser(user);
+      })
     );
   }
 
-  private userSubject = new BehaviorSubject<UserDTO>({
-    id: 1,
-    name: 'Anushka Chauhan',
-    email: 'anushka@example.com',
-    phone: '9876543210',
-    address: '123 abc street, ny'
-  });
+  setUser(user: UserDTO): void {
+    this.loggedInUser = user;
+  }
 
-  getUser(): Observable<UserDTO> {
-    return this.userSubject.asObservable();
+  getLoggedInUser(): UserDTO | undefined {
+    return this.loggedInUser;
   }
 
   updateUser(id: number, updatedUser: UserDTO): Observable<UserDTO> {

@@ -3,15 +3,15 @@
 
   <form (ngSubmit)="onConfirm()" *ngIf="!isLoading">
     <div class="form-group">
-      <label for="address">Delivery Address</label>
-      <textarea
-        id="address"
-        [(ngModel)]="address"
-        name="address"
-        required
-        placeholder="Enter your full delivery address"
-        rows="3"
-      ></textarea>
+      <label>Delivery Address</label>
+      <div *ngIf="!editMode; else editInput" class="address-display">
+        {{ address }}
+        <button class="edit-btn" (click)="editAddress()">Edit</button>
+      </div>
+
+      <ng-template #editInput>
+        <input [(ngModel)]="address" placeholder="Enter new address" />
+      </ng-template>
     </div>
 
     <div class="summary">

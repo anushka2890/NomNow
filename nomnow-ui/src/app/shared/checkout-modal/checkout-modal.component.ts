@@ -10,6 +10,7 @@ import { OrderResponse } from '../../models/OrderResponse.model';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { UserDTO } from '../../models/UserDTO.model';
 
 @Component({
   selector: 'app-checkout-modal',
@@ -25,6 +26,7 @@ export class CheckoutModalComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
 
   userId?: number;
+  loggedInUser?: UserDTO;
 
   address: string = '';
   isLoading: boolean = false;
@@ -32,6 +34,8 @@ export class CheckoutModalComponent implements OnInit {
   errorMessage: string = '';
   createdOrderId: number | null = null;
   restaurantId: number | null = null;
+
+  editMode = false;
 
   constructor(
     private http: HttpClient,
@@ -44,11 +48,12 @@ export class CheckoutModalComponent implements OnInit {
   
   ngOnInit(): void {
     this.restaurantId = this.cartService.getRestaurantId();
-    const cachedUserId = this.userService.getUserId();
-    if (cachedUserId) {
-      this.userId = cachedUserId;
+    const user = this.userService.getLoggedInUser();
+    if (user) {
+      this.address = user.address;
+      this.userId = user.id;
     } else {
-      console.error('User ID not set in UserService');
+      console.error('Failed to load user profile');
     }
   }
 
@@ -114,5 +119,9 @@ export class CheckoutModalComponent implements OnInit {
         console.error(error);
       }
     });
+  }
+
+  editAddress(): void {
+    this.editMode = true;
   }
 }
