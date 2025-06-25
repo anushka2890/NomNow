@@ -17,7 +17,7 @@
     <button class="relative" (click)="openCart()">
     <div class="cart-icon">
       <span class="cart-emoji">🛒</span>
-      <span class="cart-count">3</span>
+      <span *ngIf="cartItemCount > 0" class="cart-count">{{cartItemCount}}</span>
     </div>
     </button>
 

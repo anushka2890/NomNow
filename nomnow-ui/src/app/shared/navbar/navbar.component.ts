@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { Observable, take } from 'rxjs';
 import { ProfileSidebarComponent } from "../profile-sidebar/profile-sidebar.component";
 import { User, UserService } from '../../services/user.service';
+import { CartService } from '../../services/cart.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -19,14 +20,21 @@ export class NavbarComponent implements OnInit{
   isLoggedIn$!: Observable<boolean>;
   showProfileSidebar = false;
   user?: User;
+  cartItemCount: number = 0;
 
   constructor(private dialog: MatDialog
     , private cartUiService: CartUiService
     , private authService: AuthService
     , private userService: UserService
-    ,  private router: Router) {}
+    , private router: Router
+    , private cartService: CartService ) {}
 
   ngOnInit(): void {
+
+    this.cartService.getCart().subscribe(items => {
+      this.cartItemCount = items.reduce((total, item) => total + item.quantity, 0);
+    });
+    
     this.isLoggedIn$ = this.authService.isLoggedIn$;
     // ✅ Fetch user only if logged in
     this.authService.isLoggedIn$.subscribe((loggedIn) => {
