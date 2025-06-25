@@ -49,11 +49,17 @@ export class CartService {
   }
 
   getCartTotal(): Observable<number> {
-  return this.getCart().pipe(
-    map(items => items.reduce((sum, item) => sum + item.price * item.quantity, 0))
-  );
-}
-
+    return this.getCart().pipe(
+      map(items => items.reduce((sum, item) => sum + item.price * item.quantity, 0))
+    );
+  }
+  updateCartItem(updatedItem: CartItem) {
+    const index = this.cartItems.findIndex(item => item.name === updatedItem.name);
+    if (index !== -1) {
+      this.cartItems[index] = updatedItem;
+      this.cartSubject.next(this.cartItems);
+    }
+  }
 
   constructor() { }
 }

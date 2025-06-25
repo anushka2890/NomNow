@@ -42,4 +42,18 @@ export class CartSidebarComponent implements OnInit {
   closeCheckout(): void {
     this.showCheckoutModal = false;
   }
+
+  increment(item: CartItem): void {
+    item.quantity++;
+    this.cartService.updateCartItem(item);
+  }
+
+  decrement(item: CartItem): void {
+    if (item.quantity > 1) {
+      item.quantity--;
+      this.cartService.updateCartItem(item);
+    } else {
+      this.removeItem(item.name); // Or set quantity to 0 if you prefer
+    }
+  }
 }
