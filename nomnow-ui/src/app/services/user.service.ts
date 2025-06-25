@@ -49,7 +49,11 @@ export class UserService {
   }
 
   updateUser(id: number, updatedUser: UserDTO): Observable<UserDTO> {
-  return this.http.put<UserDTO>(`${environment.apiUrl}/users/${id}`, updatedUser);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  return this.http.put<UserDTO>(`${environment.apiUrl}/users/${id}`, updatedUser, {headers});
 }
 
 

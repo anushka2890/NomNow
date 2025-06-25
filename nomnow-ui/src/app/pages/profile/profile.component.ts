@@ -107,27 +107,56 @@ import { OrderResponse } from '../../models/OrderResponse.model';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { UserDTO } from '../../models/UserDTO.model';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
-  imports: [CommonModule]
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class ProfileComponent implements OnInit {
   user!: UserDTO;
   enrichedOrders: EnrichedOrder[] = [];
   loading: boolean = true;
+  isEditing: boolean = false;
+  profileForm!: FormGroup;
 
   constructor(
     private userService: UserService,
     private restaurantService: RestaurantService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.route.url.subscribe(() => {
-      this.loadUserAndOrders(); // custom method that does the full logic
+      this.loadUserAndOrders();
+    });
+
+    this.profileForm = this.fb.group({
+      name: [''],
+      email: [''],
+      phone: ['']
+    });
+  }
+
+  saveChanges(): void {
+    if (this.profileForm.invalid) return;
+
+    const updatedUser: UserDTO = {
+      ...this.user,
+      ...this.profileForm.value
+    };
+
+    this.userService.updateUser(this.user.id, updatedUser).subscribe({
+      next: (res) => {
+        this.user = res;
+        this.toggleEdit(); // exit edit mode
+      },
+      error: (err) => {
+        console.error('Failed to update profile:', err);
+      }
     });
   }
 
@@ -181,6 +210,17 @@ export class ProfileComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  toggleEdit(): void {
+    this.isEditing = !this.isEditing;
+    if (this.isEditing) {
+      this.profileForm.setValue({
+        name: this.user.name,
+        email: this.user.email,
+        phone: this.user.phone
+      });
+    }
   }
 
 }

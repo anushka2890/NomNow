@@ -10,8 +10,15 @@
 
   <!-- Personal Info -->
   <div class="info-section">
-    <h3>Personal Information</h3>
-    <div class="info-grid">
+    <div class="info-header">
+      <h3>Personal Information</h3>
+      <button (click)="toggleEdit()" class="edit-btn">
+        {{ isEditing ? 'Cancel' : 'Edit' }}
+      </button>
+    </div>
+
+    <!-- View Mode -->
+    <div class="info-grid" *ngIf="!isEditing">
       <div class="info-item">
         <span class="label">📧 Email:</span>
         <span>{{ user.email }}</span>
@@ -25,6 +32,23 @@
         <span>{{ user.address }}</span>
       </div>
     </div>
+
+    <!-- Edit Mode -->
+    <form *ngIf="isEditing" [formGroup]="profileForm" (ngSubmit)="saveChanges()" class="edit-form">
+      <div class="form-row">
+        <label>Name:</label>
+        <input type="text" formControlName="name" />
+      </div>
+      <div class="form-row">
+        <label>Email:</label>
+        <input type="email" formControlName="email" />
+      </div>
+      <div class="form-row">
+        <label>Phone:</label>
+        <input type="text" formControlName="phone" />
+      </div>
+      <button class="save-btn" type="submit">Save Changes</button>
+    </form>
   </div>
 
   <!-- Order History -->
@@ -64,6 +88,5 @@
     <ng-template #noOrders>
       <p style="color: #999;">You have not placed any orders yet.</p>
     </ng-template>
-
   </div>
 </div>
