@@ -1,15 +1,34 @@
-<section class="hero-section">
-  <div class="hero-content">
-    <h1 class="hero-title">Delicious food, delivered fast.</h1>
-    <p class="hero-subtitle">Order from top-rated restaurants near you with just a few clicks.</p>
-    
-    <div class="hero-search">
-      <input type="text" placeholder="Search for dishes or restaurants..." />
-      <button>Search</button>
+<div class="hero-section">
+  <div class="hero-left">
+    <h1>Delicious food, delivered fast.</h1>
+    <p>Order from top-rated restaurants near you with just a few clicks.</p>
+
+    <div class="search-container">
+      <input
+        [formControl]="searchControl"
+        placeholder="Search for restaurants..."
+        class="search-input"
+      />
+
+      <button class="search-button" (click)="onSearchClick()">Search</button>
+
+      <!-- Autocomplete Dropdown -->
+      <ul *ngIf="filteredRestaurants.length > 0" class="search-dropdown">
+        <li *ngFor="let rest of filteredRestaurants" (click)="onOptionClick(rest)">
+          🍽️ {{ rest.name }}
+          <br />
+          <small *ngIf="getMatchedMenuItem(rest) as match">
+            🍛 Serves <strong>{{ match }}</strong>
+          </small>
+        </li>
+      </ul>
     </div>
   </div>
 
-  <div class="hero-image">
-    <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092" alt="Food Banner" />
+  <div class="hero-right">
+    <img
+      src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1500&q=80"
+      alt="Food Banner"
+    />
   </div>
-</section>
+</div>

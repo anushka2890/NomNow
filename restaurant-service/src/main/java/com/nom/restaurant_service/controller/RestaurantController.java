@@ -1,5 +1,6 @@
 package com.nom.restaurant_service.controller;
 
+import com.nom.restaurant_service.DTO.RestaurantAndMenuDTO;
 import com.nom.restaurant_service.DTO.RestaurantDTO;
 import com.nom.restaurant_service.model.Restaurant;
 import com.nom.restaurant_service.service.RestaurantService;
@@ -37,12 +38,8 @@ public class RestaurantController {
 
     @GetMapping
     @Operation(summary = "get all restaurants")
-    public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
-        List<RestaurantDTO> dtos = restaurantService.getAllRestaurants()
-                .stream()
-                .map(r -> new RestaurantDTO(r.getId(), r.getName(), r.getAddress(), r.getRating(), r.getImageUrl()))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+    public ResponseEntity<List<Restaurant>> getAllRestaurants() {
+        return ResponseEntity.ok(restaurantService.getAllRestaurants());
     }
 
     @DeleteMapping("/{id}")
@@ -56,5 +53,10 @@ public class RestaurantController {
     @Operation(summary = "update a restaurant")
     public Restaurant updateRestaurant(@PathVariable Long id, @RequestBody Restaurant updatedRestaurant) {
         return restaurantService.updateRestaurant(id, updatedRestaurant);
+    }
+
+    @GetMapping("/search")
+    public List<RestaurantAndMenuDTO> searchRestaurants(@RequestParam String query) {
+        return restaurantService.searchByNameOrMenuItem(query);
     }
 }

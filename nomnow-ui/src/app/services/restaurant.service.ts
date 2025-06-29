@@ -12,8 +12,8 @@ export class RestaurantService {
 
   constructor(private http: HttpClient) {}
 
-  getRestaurants(): Observable<RestaurantDTO[]> {
-    return this.http.get<RestaurantDTO[]>(this.baseUrl);
+  getRestaurants(): Observable<Restaurant[]> {
+    return this.http.get<Restaurant[]>(this.baseUrl);
   }
 
   getRestaurantById(id: number): Observable<Restaurant> {

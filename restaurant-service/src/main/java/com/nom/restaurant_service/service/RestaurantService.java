@@ -1,5 +1,7 @@
 package com.nom.restaurant_service.service;
 
+import com.nom.restaurant_service.DTO.RestaurantAndMenuDTO;
+import com.nom.restaurant_service.DTO.RestaurantDTO;
 import com.nom.restaurant_service.model.MenuItem;
 import com.nom.restaurant_service.model.Restaurant;
 import com.nom.restaurant_service.repository.RestaurantRepository;
@@ -7,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class RestaurantService {
@@ -52,6 +56,42 @@ public class RestaurantService {
             }
             return restaurantRepository.save(existingRestaurant);
         }).orElseThrow(() -> new RuntimeException("Restaurant not found with id: " + id));
+    }
+
+    public List<RestaurantAndMenuDTO> searchByNameOrMenuItem(String query) {
+        List<Restaurant> allRestaurants = restaurantRepository.findAll();
+        String lowerQuery = query.toLowerCase();
+
+        return allRestaurants.stream()
+                .map(restaurant -> {
+                    boolean nameMatches = restaurant.getName().toLowerCase().contains(lowerQuery);
+
+                    String matchedMenuItem = restaurant.getMenuItems().stream()
+                            .filter(item -> item.getName().toLowerCase().contains(lowerQuery))
+                            .map(MenuItem::getName)
+                            .findFirst()
+                            .orElse(null);
+
+                    if (nameMatches || matchedMenuItem != null) {
+                        return convertToDTO(restaurant, matchedMenuItem);
+                    } else {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+
+    private RestaurantAndMenuDTO convertToDTO(Restaurant restaurant, String matchedMenuItem) {
+        RestaurantAndMenuDTO dto = new RestaurantAndMenuDTO();
+        dto.setId(restaurant.getId());
+        dto.setName(restaurant.getName());
+        dto.setAddress(restaurant.getAddress());
+        dto.setRating(restaurant.getRating());
+        dto.setImageUrl(restaurant.getImageUrl());
+        dto.setMenuMatch(matchedMenuItem); // can be null
+        return dto;
     }
 
 }

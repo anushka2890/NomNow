@@ -3,66 +3,90 @@
   justify-content: space-between;
   align-items: center;
   padding: 60px 80px;
-  background-color: #fffaf4;
+  background-color: #fff6ec;
   flex-wrap: wrap;
 }
 
-.hero-content {
-  max-width: 50%;
-  min-width: 300px;
+.hero-left {
+  flex: 1;
+  padding-right: 40px;
 }
 
-.hero-title {
-  font-size: 42px;
-  font-weight: 700;
-  color: #222;
+.hero-left h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
   margin-bottom: 16px;
 }
 
-.hero-subtitle {
-  font-size: 18px;
-  color: #555;
-  margin-bottom: 32px;
+.hero-left p {
+  font-size: 1.2rem;
+  margin-bottom: 24px;
 }
 
-.hero-search {
+.search-container {
+  position: relative;
   display: flex;
-  gap: 12px;
+  align-items: center;
+  max-width: 500px;
+  gap: 10px;
 }
 
-.hero-search input {
-  padding: 10px 16px;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+.search-input {
   flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
-.hero-search button {
+.search-button {
+  padding: 12px 20px;
   background-color: #ff6600;
   color: white;
   border: none;
-  padding: 10px 20px;
-  font-weight: bold;
-  font-size: 15px;
   border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  border-radius: 0 0 8px 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.search-dropdown li {
+  padding: 10px;
   cursor: pointer;
 }
 
-.hero-search button:hover {
-  background-color: #e25700;
+.search-dropdown li:hover {
+  background-color: #f9f9f9;
 }
 
-
-.hero-image {
+.hero-right {
   flex: 1;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
-.hero-image img {
-  width: 100%;
-  max-width: 500px;
-  height: auto;
+.hero-right img {
+  max-width: 100%;
   border-radius: 12px;
+}
+.search-dropdown small {
+  color: #555;
+  font-size: 0.85rem;
+  margin-left: 24px;
 }
