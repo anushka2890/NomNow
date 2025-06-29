@@ -44,7 +44,13 @@ export class NavbarComponent implements OnInit{
       if (loggedIn) {
         this.userService.getUserProfile().subscribe({
           next: (data) => this.user = data,
-          error: (err) => console.error('Failed to fetch user info', err)
+          error: (err) => {
+            console.error('Failed to fetch user info', err);
+            if (err.status === 401) {
+              this.authService.logout(); // clear token + update state
+              this.openLogin();          // open login modal immediately
+            }
+          }
         });
       } else {
         this.user = undefined;

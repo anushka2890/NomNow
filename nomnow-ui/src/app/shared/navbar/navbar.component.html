@@ -32,9 +32,9 @@
 
 <!-- Show profile icon if logged in -->
 <ng-template #loggedInBlock>
-  <div *ngIf="user" class="profile-button">
+  <div class="profile-button">
     <div class="user-avatar" (click)="toggleProfileSidebar()">
-      {{ user.name.charAt(0) | uppercase }}
+      {{ user?.name?.charAt(0) || '👤' | uppercase }}
     </div>
   </div>
 </ng-template>
