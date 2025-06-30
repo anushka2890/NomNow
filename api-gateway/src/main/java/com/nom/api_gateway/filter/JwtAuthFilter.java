@@ -30,8 +30,6 @@ public class JwtAuthFilter implements GatewayFilter, Ordered{
 
         // 👇 Skip auth for public routes
         if (path.startsWith("/api/auth/")
-                || path.equals("/api/users/login")
-                || path.equals("/api/users/register")
                 || path.startsWith("/api/rest/")) {
             return chain.filter(exchange);
         }
