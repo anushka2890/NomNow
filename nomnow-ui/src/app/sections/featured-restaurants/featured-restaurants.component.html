@@ -1,9 +1,24 @@
 <section class="featured-restaurants">
   <h2 class="section-title">Popular Restaurants 🍔</h2>
 
-  <div class="restaurant-logos">
-    <div class="restaurant-card" *ngFor="let restaurant of restaurants">
-      <img [src]="restaurant.logo" [alt]="restaurant.name" />
+  <ng-container *ngIf="restaurants && restaurants.length > 0; else noRestaurants">
+    <div class="restaurant-logos">
+      <div
+        class="restaurant-card"
+        *ngFor="let restaurant of restaurants"
+        (click)="goToRestaurant(restaurant.id)"
+      >
+        <img [src]="restaurant.imageUrl" [alt]="restaurant.name" />
+        <div class="restaurant-info">
+          <h3>{{ restaurant.name }}</h3>
+          <p>⭐ {{ restaurant.rating }}</p>
+          <p class="address">{{ restaurant.address }}</p>
+        </div>
+      </div>
     </div>
-  </div>
+  </ng-container>
+
+  <ng-template #noRestaurants>
+    <p>No popular restaurants available right now. {{restaurants.length}}</p>
+  </ng-template>
 </section>

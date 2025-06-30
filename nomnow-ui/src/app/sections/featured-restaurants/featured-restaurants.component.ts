@@ -1,35 +1,33 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectorRef
+} from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-featured-restaurants',
-  imports: [FormsModule, CommonModule],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './featured-restaurants.component.html',
   styleUrl: './featured-restaurants.component.css'
 })
-export class FeaturedRestaurantsComponent {
-  restaurants = [
-  {
-    name: 'McDonald\'s',
-    logo: 'https://1000logos.net/wp-content/uploads/2017/03/McDonalds-logo.png'
-  },
-  {
-    name: 'KFC',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/b/bf/KFC_logo.svg'
-  },
-  {
-    name: 'Domino\'s',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/7/74/Dominos_pizza_logo.svg'
-  },
-  {
-    name: 'Burger King',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Burger_King_2020.svg/320px-Burger_King_2020.svg.png'
-  },
-  {
-    name: 'Subway',
-    logo: 'https://images.seeklogo.com/logo-png/28/1/subway-logo-png_seeklogo-287365.png'
-  }
-];
+export class FeaturedRestaurantsComponent implements OnChanges {
+  @Input() restaurants: any[] = [];
 
+  constructor(private router: Router, private cdr: ChangeDetectorRef) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['restaurants']) {
+      console.log('Updated Featured Restaurants:', this.restaurants);
+      this.cdr.detectChanges(); // force re-check
+    }
+  }
+
+  goToRestaurant(id: number) {
+    this.router.navigate(['/restaurant', id]);
+  }
 }

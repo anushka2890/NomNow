@@ -19,12 +19,14 @@ import { RestaurantService } from '../../services/restaurant.service';
 export class HomeComponent implements OnInit{
   allRestaurants: Restaurant[] = [];
   filteredRestaurants: any[] = [];
+  popularRestaurants: any[] = [];
 
   constructor(private restaurantService: RestaurantService, private router: Router) {}
 
   ngOnInit(): void {
     this.restaurantService.getRestaurants().subscribe(data => {
       this.allRestaurants = data;
+      this.popularRestaurants = data.filter(r => r.rating>=4.5);
     });
   }
 
