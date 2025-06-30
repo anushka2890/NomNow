@@ -6,6 +6,7 @@ export interface CartItem {
   price: number;
   quantity: number;
   restaurantId: number;
+  category?: string;
 }
 @Injectable({
   providedIn: 'root'

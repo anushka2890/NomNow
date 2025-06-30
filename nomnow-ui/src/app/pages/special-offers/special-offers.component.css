@@ -91,4 +91,11 @@
   color: #555;
 }
 
+.discount-badge {
+  background-color: #ff4757;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
 

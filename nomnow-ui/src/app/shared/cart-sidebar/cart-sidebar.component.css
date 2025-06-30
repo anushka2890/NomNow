@@ -267,4 +267,52 @@
   border-radius: 4px;
   flex: 1;
 }
+.offer-list {
+  display: flex;
+  flex-direction: column;
+  margin: 8px 0;
+}
+
+.offer-item {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+
+.offer-item.selected {
+  background-color: #d4edda;
+  border-color: #28a745;
+}
+
+.badge {
+  display: inline-block;
+  background-color: #28a745;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  margin-top: 8px;
+}
+
+.badge button {
+  background: none;
+  border: none;
+  color: white;
+  margin-left: 8px;
+  cursor: pointer;
+}
+.offer-item.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.offer-error {
+  color: red;
+  margin-top: 8px;
+  font-size: 0.85rem;
+}
+
 

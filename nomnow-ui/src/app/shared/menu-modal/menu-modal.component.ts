@@ -24,7 +24,8 @@ export class MenuModalComponent {
       name: item.name,
       price: item.price,
       quantity: 1,
-      restaurantId: this.restaurantId
+      restaurantId: this.restaurantId,
+      category: item.category
     };
     this.cartService.addToCart(cartItem);
     this.cartService.setRestaurantId(this.restaurantId);

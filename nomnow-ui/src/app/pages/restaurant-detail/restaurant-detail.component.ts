@@ -53,7 +53,8 @@ export class RestaurantDetailComponent implements OnInit {
       name: item.name,
       price: item.price,
       quantity: 1,
-      restaurantId: this.restaurant.id
+      restaurantId: this.restaurant.id,
+      category: item.category
     };
     this.cartService.setRestaurantId(this.restaurant.id);
     this.cartService.addToCart(cartItem);

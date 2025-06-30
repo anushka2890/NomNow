@@ -1,21 +1,21 @@
 <div class="cart-sidebar">
   <div *ngIf="(cartItems$ | async) as items">
-    
-    <!-- Always show header with Close -->
+
+    <!-- Header -->
     <div class="cart-header">
       <h3>Your Cart</h3>
       <button class="close-btn" (click)="onClose()">×</button>
     </div>
 
-    <!-- If Cart is Empty -->
+    <!-- Empty Cart -->
     <div *ngIf="items.length === 0" class="empty-cart">
       Your cart is empty.
     </div>
 
-    <!-- If Cart has Items -->
+    <!-- Items in Cart -->
     <div *ngIf="items.length > 0">
       <div class="cart-items">
-        <div *ngFor="let item of items; let i = index" class="cart-item">
+        <div *ngFor="let item of items" class="cart-item">
           <div class="item-info">
             <div class="item-name-row">
               <div class="item-name">{{ item.name }}</div>
@@ -27,36 +27,48 @@
             </div>
             <div class="item-price">₹{{ item.price }} x {{ item.quantity }}</div>
           </div>
-          
         </div>
       </div>
 
-      <!-- Promo Code Input -->
-      <div class="promo-code-section">
-        <input
-          type="text"
-          [(ngModel)]="promoCode"
-          placeholder="Enter or select promo code"
-          list="availablePromoCodes"
-        />
-        <datalist id="availablePromoCodes">
-          <option *ngFor="let code of promoCodes" [value]="code"></option>
-        </datalist>
-        <button (click)="applyPromoCode()">Apply</button>
-      </div>
-      <div class="promo-message" *ngIf="promoMessage">{{ promoMessage }}</div>
+      <!-- Offers Section -->
+      <!-- Offers Dropdown or List -->
+<div class="offers-section" *ngIf="availableOffers.length > 0">
+  <label>Available Offers:</label>
+  <div *ngIf="errorMessage" class="offer-error">
+  {{ errorMessage }}
+</div>
+  <div class="offer-list">
+    <div 
+      *ngFor="let offer of availableOffers" 
+      class="offer-item"
+      [class.selected]="selectedOffer?.id === offer.id"
+      (click)="selectOffer(offer)">
+      <strong>{{ offer.title }}</strong><br />
+      <small>
+        {{ offer.offerType === 'FLAT' ? '₹' + offer.discountAmount + ' OFF' : offer.discountAmount + '% OFF' }}
+      </small>
+    </div>
+  </div>
+</div>
 
+<!-- Show applied offer badge -->
+<div *ngIf="selectedOffer" class="applied-offer">
+  Offer Applied: {{ selectedOffer.title }}
+  <button (click)="removeOffer()">✖</button>
+</div>
+
+
+
+      <!-- Totals -->
       <div class="cart-footer">
-        <!-- Show discounted total only if promo is applied -->
-        <div class="total" *ngIf="promoApplied">
+        <div class="total" *ngIf="selectedOffer">
           Discounted Total: ₹{{ getDiscountedTotal(items) }}
         </div>
-        <div class="total" *ngIf="!promoApplied">
+        <div class="total" *ngIf="!selectedOffer">
           Total: ₹{{ getTotal(items) }}
         </div>
 
-        
-
+       
         <!-- Checkout Button -->
         <button class="checkout-btn" (click)="openCheckout()">Checkout</button>
 

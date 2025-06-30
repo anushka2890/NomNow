@@ -16,6 +16,10 @@
       <div class="offer-details">
         <h3>{{ offer.title }}</h3>
         <p>{{ offer.description }}</p>
+        <!-- 🔽 Show badge for discount -->
+        <span class="discount-badge">
+          {{ offer.offerType === 'FLAT' ? '₹' + offer.discountAmount + ' OFF' : offer.discountAmount + '% OFF' }}
+        </span>
         <span class="tag">{{ offer.category }}</span>
       </div>
     </div>

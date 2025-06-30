@@ -5,4 +5,6 @@ export interface Offer {
   imageUrl: string;
   category: string;
   restaurantId?: number;
+  discountAmount: number;
+  offerType: 'FLAT' | 'PERCENTAGE';
 }

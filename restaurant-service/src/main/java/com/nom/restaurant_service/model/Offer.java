@@ -1,9 +1,7 @@
 package com.nom.restaurant_service.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.nom.restaurant_service.enums.OfferType;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -19,6 +17,9 @@ public class Offer {
     private String imageUrl;
     private String category;
     private Long restaurantId;
+    private Integer discountAmount;
+    @Enumerated(EnumType.STRING)
+    private OfferType offerType;
 
     public Long getId() {
         return id;
@@ -68,4 +69,19 @@ public class Offer {
         this.restaurantId = restaurantId;
     }
 
+    public Integer getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(Integer discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public OfferType getOfferType() {
+        return offerType;
+    }
+
+    public void setOfferType(OfferType offerType) {
+        this.offerType = offerType;
+    }
 }
