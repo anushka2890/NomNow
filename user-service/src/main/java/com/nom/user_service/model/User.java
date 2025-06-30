@@ -2,6 +2,9 @@ package com.nom.user_service.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -17,7 +20,8 @@ public class User {
 
     private String phone;
 
-    private String address;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses = new ArrayList<>();
 
     public User() {
     }
@@ -61,11 +65,11 @@ public class User {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
+    public List<Address> getAddresses() {
+        return addresses;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
     }
 }

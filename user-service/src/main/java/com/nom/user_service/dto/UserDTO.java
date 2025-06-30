@@ -1,18 +1,22 @@
 package com.nom.user_service.dto;
 
+import java.util.List;
+
 public class UserDTO {
     private Long id;
     private String name;
     private String email;
     private String phone;
-    private String address;
+    private List<AddressDTO> addresses;
 
-    public UserDTO(Long id, String name, String email, String phone, String address) {
+    public UserDTO(){}
+
+    public UserDTO(Long id, String name, String email, String phone, List<AddressDTO> addresses) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.address = address;
+        this.addresses = addresses;
     }
 
     public Long getId() {
@@ -47,11 +51,11 @@ public class UserDTO {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
+    public List<AddressDTO> getAddresses() {
+        return addresses;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setAddresses(List<AddressDTO> addresses) {
+        this.addresses = addresses;
     }
 }
