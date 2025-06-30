@@ -1,8 +1,13 @@
-import { HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from "@angular/common/http";
-import { inject } from "@angular/core";
-import { catchError, Observable, throwError } from "rxjs";
-import { AuthService } from "./services/auth.service";
-import { Router } from "@angular/router";
+import {
+  HttpEvent,
+  HttpHandlerFn,
+  HttpInterceptorFn,
+  HttpRequest
+} from '@angular/common/http';
+import { inject } from '@angular/core';
+import { catchError, Observable, throwError } from 'rxjs';
+import { AuthService } from './services/auth.service';
+import { Router } from '@angular/router';
 
 export const AuthInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
@@ -11,14 +16,16 @@ export const AuthInterceptor: HttpInterceptorFn = (
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if(authService.isTokenExpired()){
+  const isAuthRequest = req.url.includes('/auth/login') || req.url.includes('/auth/register');
+
+  // ✅ Skip expiration check for login/register requests
+  if (!isAuthRequest && authService.isTokenExpired()) {
     authService.logout();
     return throwError(() => new Error('Session expired'));
   }
 
   const token = authService.getToken();
 
-  // Clone request and attach token if present
   const authReq = token
     ? req.clone({
         setHeaders: {

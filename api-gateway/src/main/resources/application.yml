@@ -45,14 +45,6 @@ spring:
               /api/restaurants/*/menu-items/*,
               /api/special-offers/**
 
-
-        # User Service (Public registration/login)
-        - id: user-service-public
-          uri: http://localhost:8084
-          predicates:
-            - Path=/api/users/register,
-              /api/users/login
-
         # Auth Service (Public)
         - id: auth-service
           uri: http://localhost:8085
@@ -65,7 +57,7 @@ spring:
         - id: user-service
           uri: http://localhost:8084
           predicates:
-            - Path=/api/users/**
+            - Path=/api/users/**, /api/addresses/**
 
         # Order Service
         - id: order-service

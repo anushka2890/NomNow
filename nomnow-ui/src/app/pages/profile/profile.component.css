@@ -149,3 +149,27 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+.address-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.address-card {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+  position: relative;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #d9534f;
+  cursor: pointer;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}

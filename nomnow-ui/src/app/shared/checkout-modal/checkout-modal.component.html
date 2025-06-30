@@ -4,15 +4,36 @@
   <form (ngSubmit)="onConfirm()" *ngIf="!isLoading">
     <div class="form-group">
       <label>Delivery Address</label>
-      <div *ngIf="!editMode; else editInput" class="address-display">
-        {{ address }}
-        <button class="edit-btn" (click)="editAddress()">Edit</button>
+
+      <!-- Dropdown of saved addresses -->
+      <select
+        [(ngModel)]="selectedAddressId"
+        (change)="onAddressChange(selectedAddressId)"
+        [ngModelOptions]="{ standalone: true }"
+        class="address-dropdown"
+        *ngIf="addresses.length > 0 && !editMode">
+        <option *ngFor="let addr of addresses" [value]="addr.id">
+          {{ addr.label }} - {{ addr.street }}, {{ addr.city }}
+        </option>
+      </select>
+
+      <!-- Full Address Preview -->
+      <div class="address-display" *ngIf="address && !editMode">
+        <p>{{ address }}</p>
+        <button type="button" class="edit-btn" (click)="editAddress()">Edit</button>
       </div>
 
-      <ng-template #editInput>
-        <input [(ngModel)]="address" placeholder="Enter new address" />
-      </ng-template>
+      <!-- Manual edit input -->
+      <div *ngIf="editMode">
+        <input
+          *ngIf="editMode"
+          [(ngModel)]="address"
+          [ngModelOptions]="{ standalone: true }"
+          placeholder="Enter delivery address manually"
+          class="manual-address-input" />
+      </div>
     </div>
+
 
     <div class="summary">
       <p><strong>Total Items:</strong> {{ cartItems.length }}</p>

@@ -13,7 +13,7 @@ public class Address {
     private String state;
     private String pincode;
     private String label;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
     public Address(){}

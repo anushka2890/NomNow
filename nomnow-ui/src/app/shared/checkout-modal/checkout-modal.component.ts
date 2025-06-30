@@ -11,6 +11,8 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { UserDTO } from '../../models/UserDTO.model';
+import { AddressService } from '../../services/address.service';
+import { Address } from '../../models/address.model';
 
 @Component({
   selector: 'app-checkout-modal',
@@ -28,7 +30,9 @@ export class CheckoutModalComponent implements OnInit {
   userId?: number;
   loggedInUser?: UserDTO;
 
+  addresses: Address[] = [];
   address: string = '';
+  selectedAddressId!: number ;
   isLoading: boolean = false;
   successMessage: string = '';
   errorMessage: string = '';
@@ -43,17 +47,40 @@ export class CheckoutModalComponent implements OnInit {
     private router: Router,
     private cartService: CartService,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private addressService: AddressService
   ) {}
   
   ngOnInit(): void {
     this.restaurantId = this.cartService.getRestaurantId();
+
     const user = this.userService.getLoggedInUser();
     if (user) {
-      this.address = user.address;
       this.userId = user.id;
+      this.fetchSavedAddresses();
     } else {
       console.error('Failed to load user profile');
+    }
+  }
+  fetchSavedAddresses(): void {
+    this.addressService.getUserAddress().subscribe({
+      next: (res) => {
+        this.addresses = res;
+        if (res.length > 0) {
+          this.selectedAddressId = res[0].id;
+          this.address = this.buildFullAddress(res[0]); // ✅
+        }
+      },
+      error: (err) => console.error('Failed to fetch addresses', err)
+    });
+  }
+  buildFullAddress(addr: Address): string {
+    return `${addr.label}, ${addr.street}, ${addr.city}, ${addr.state} - ${addr.pincode}`;
+  }
+  onAddressChange(id: number): void {
+    const selected = this.addresses.find(a => a.id === id);
+    if (selected) {
+      this.address = this.buildFullAddress(selected);
     }
   }
 

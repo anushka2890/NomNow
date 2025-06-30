@@ -9,6 +9,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { UserDTO } from '../../models/UserDTO.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Address } from '../../models/address.model';
+import { AddressService } from '../../services/address.service';
 
 @Component({
   selector: 'app-profile',
@@ -24,12 +26,14 @@ export class ProfileComponent implements OnInit {
   profileForm!: FormGroup;
   totalOrders: number = 0;
   totalSpent: number = 0;
+  addresses: any[] = []; 
 
   constructor(
     private userService: UserService,
     private restaurantService: RestaurantService,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private addressService: AddressService
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +46,7 @@ export class ProfileComponent implements OnInit {
       email: [''],
       phone: ['']
     });
+    this.loadAddress();
   }
 
   saveChanges(): void {
@@ -131,4 +136,16 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  loadAddress(){
+    this.addressService.getUserAddress().subscribe({
+      next: (data) => this.addresses = Array.isArray(data) ? data : [data],
+      error: (err) => console.error('Failed to load addresses', err)
+    });
+  }
+
+  onDeleteAddress(id: number) {
+    this.addressService.deleteAddress(id).subscribe(() => {
+      this.addresses = this.addresses.filter(addr => addr.id !== id);
+    });
+  }
 }

@@ -27,9 +27,17 @@
         <span class="label">📞 Phone:</span>
         <span>{{ user.phone }}</span>
       </div>
-      <div class="info-item">
-        <span class="label">🏠 Address:</span>
-        <span>{{ user.address }}</span>
+      <div class="info-section" *ngIf="addresses.length > 0">
+        <div class="info-header">
+          <h3>Saved Addresses</h3>
+        </div>
+        <div class="address-list">
+          <div class="address-card" *ngFor="let addr of addresses">
+            <p><strong>{{ addr.label }}</strong></p>
+            <p>{{ addr.street }}, {{ addr.city }}, {{ addr.state }} - {{ addr.pincode }}</p>
+            <button class="delete-btn" (click)="onDeleteAddress(addr.id)">🗑 Delete</button>
+          </div>
+        </div>
       </div>
     </div>
 
