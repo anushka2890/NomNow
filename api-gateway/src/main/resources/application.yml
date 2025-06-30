@@ -42,7 +42,8 @@ spring:
             - Path=/api/rest/**,
               /api/menu-items/**,
               /api/restaurants/*/menu-items,
-              /api/restaurants/*/menu-items/*
+              /api/restaurants/*/menu-items/*,
+              /api/special-offers/**
 
 
         # User Service (Public registration/login)

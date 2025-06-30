@@ -1,0 +1,23 @@
+<section class="special-offers">
+  <h2>🎉 Special Offers</h2>
+
+  <div class="category-filter">
+    <label for="category-select">Filter by Category:</label>
+    <select id="category-select" (change)="onCategoryChange($event)">
+      <option value="">All</option>
+      <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+    </select>
+  </div>
+
+  <!-- 🧭 Horizontal scroll wrapper -->
+  <div class="offer-carousel">
+    <div class="offer-card" *ngFor="let offer of offers" (click)="goToRestaurant(offer.restaurantId)">
+      <img [src]="offer.imageUrl" [alt]="offer.title" />
+      <div class="offer-details">
+        <h3>{{ offer.title }}</h3>
+        <p>{{ offer.description }}</p>
+        <span class="tag">{{ offer.category }}</span>
+      </div>
+    </div>
+  </div>
+</section>

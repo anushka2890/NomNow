@@ -7,6 +7,7 @@ import { OrderStatusComponent } from './pages/order-status/order-status.componen
 import { RestaurantListComponent } from './pages/restaurant-list/restaurant-list.component';
 import { RestaurantDetailComponent } from './pages/restaurant-detail/restaurant-detail.component';
 import { LoginModalComponent } from './auth/login-modal/login-modal.component';
+import { SpecialOffersComponent } from './pages/special-offers/special-offers.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -29,4 +30,5 @@ export const routes: Routes = [
         import('./pages/order-history/order-history.component').then(m => m.OrderHistoryComponent)
     },
     { path: 'login', component: LoginModalComponent },
+    { path: 'special-offers', component: SpecialOffersComponent },
 ];
