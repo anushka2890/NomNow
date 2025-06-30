@@ -127,7 +127,8 @@ export class CartSidebarComponent implements OnInit {
       const discount = Math.min(this.selectedOffer.discountAmount, total);
       return total - discount;
     } else if (this.selectedOffer.offerType === 'PERCENTAGE') {
-      return Math.round(total * (1 - this.selectedOffer.discountAmount / 100));
+      const discounted = total * (1 - this.selectedOffer.discountAmount / 100);
+      return parseFloat(discounted.toFixed(2));
     }
 
     return total;

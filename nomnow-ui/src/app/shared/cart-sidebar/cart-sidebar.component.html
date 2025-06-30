@@ -52,10 +52,10 @@
 </div>
 
 <!-- Show applied offer badge -->
-<div *ngIf="selectedOffer" class="applied-offer">
-  Offer Applied: {{ selectedOffer.title }}
-  <button (click)="removeOffer()">✖</button>
-</div>
+      <div *ngIf="selectedOffer" class="selected-offer">
+        Offer Applied: {{ selectedOffer.title }}
+        <button class="remove-offer-btn" (click)="removeOffer()">✖</button>
+      </div>
 
 
 
