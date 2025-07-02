@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { MenuItemDTO, Restaurant, RestaurantDTO } from '../models/restaurant';
+import { MenuItemDTO, RestaurantDTO } from '../models/restaurant';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -12,12 +12,12 @@ export class RestaurantService {
 
   constructor(private http: HttpClient) {}
 
-  getRestaurants(): Observable<Restaurant[]> {
-    return this.http.get<Restaurant[]>(this.baseUrl);
+  getRestaurants(): Observable<RestaurantDTO[]> {
+    return this.http.get<RestaurantDTO[]>(this.baseUrl);
   }
 
-  getRestaurantById(id: number): Observable<Restaurant> {
-    return this.http.get<Restaurant>(`${this.baseUrl}/${id}`);
+  getRestaurantById(id: number): Observable<RestaurantDTO> {
+    return this.http.get<RestaurantDTO>(`${this.baseUrl}/${id}`);
   }
 
   getMenuItemById(itemId: number): Observable<MenuItemDTO> {

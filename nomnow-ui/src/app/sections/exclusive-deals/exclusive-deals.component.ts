@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MenuItemDTO } from '../../models/restaurant';
+import { OfferDTO } from '../../models/offer.model';
+import { OfferService } from '../../services/offer.service';
+import { RestaurantService } from '../../services/restaurant.service';
+import { map } from 'rxjs';
+import { CartItem, CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-exclusive-deals',
@@ -7,36 +13,43 @@ import { Component } from '@angular/core';
   templateUrl: './exclusive-deals.component.html',
   styleUrl: './exclusive-deals.component.css'
 })
-export class ExclusiveDealsComponent {
-deals = [
-  {
-    name: 'Veg Loaded Pizza',
-    restaurant: 'Domino’s',
-    price: 199,
-    discount: '-30%',
-    image: 'https://images.pexels.com/photos/4109134/pexels-photo-4109134.jpeg?auto=compress&cs=tinysrgb&h=160'
-  },
-  {
-    name: 'Chicken Zinger Burger',
-    restaurant: 'KFC',
-    price: 149,
-    discount: '-20%',
-    image: 'https://images.pexels.com/photos/1639562/pexels-photo-1639562.jpeg?auto=compress&cs=tinysrgb&h=160'
-  },
-  {
-    name: 'Paneer Wrap',
-    restaurant: 'Subway',
-    price: 129,
-    discount: '-25%',
-    image: 'https://images.pexels.com/photos/1640770/pexels-photo-1640770.jpeg?auto=compress&cs=tinysrgb&h=160'
-  },
-  {
-    name: 'Pasta Alfredo',
-    restaurant: 'Big Bowl Co.',
-    price: 179,
-    discount: '-15%',
-    image: 'https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&h=160'
-  }
-];
+export class ExclusiveDealsComponent implements OnInit{
+  exclusiveDeals : {
+    item: MenuItemDTO;
+    restaurantName: string;
+    restaurantId: number;
+  }[] = [];
+  constructor(
+    private restaurantService: RestaurantService,
+    private cartService: CartService
+  ) {}
 
+  ngOnInit(): void {
+      this.restaurantService.getRestaurants().subscribe(restaurants => {
+        this.exclusiveDeals = [];
+        restaurants.forEach(r => {
+          const restaurantName = r.name;
+          const restaurantId = r.id;
+          r.menuItemDTOList.forEach((item: MenuItemDTO) => {
+            if(item.offer){
+              this.exclusiveDeals.push({item, restaurantName, restaurantId});
+            }
+          });
+        });
+      });
+  }
+  addToCart(item: MenuItemDTO, restaurantId: number): void {
+    const cartItem: CartItem = {
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: 1,
+      restaurantId: restaurantId,
+      category: item.category,
+      offer: item.offer ?? null
+    };
+
+    this.cartService.setRestaurantId(restaurantId);
+    this.cartService.addToCart(cartItem);
+  }
 }

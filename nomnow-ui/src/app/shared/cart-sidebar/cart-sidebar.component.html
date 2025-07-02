@@ -1,18 +1,18 @@
-<div class="cart-sidebar">
+<!-- <div class="cart-sidebar">
   <div *ngIf="(cartItems$ | async) as items">
 
-    <!-- Header -->
+    <!-- Header 
     <div class="cart-header">
       <h3>Your Cart</h3>
       <button class="close-btn" (click)="onClose()">×</button>
     </div>
 
-    <!-- Empty Cart -->
+    <!-- Empty Cart 
     <div *ngIf="items.length === 0" class="empty-cart">
       Your cart is empty.
     </div>
 
-    <!-- Items in Cart -->
+    <!-- Items in Cart 
     <div *ngIf="items.length > 0">
       <div class="cart-items">
         <div *ngFor="let item of items" class="cart-item">
@@ -25,13 +25,19 @@
                 <button (click)="increment(item)">+</button>
               </div>
             </div>
-            <div class="item-price">₹{{ item.price }} x {{ item.quantity }}</div>
+            <!-- <div class="item-price">₹{{ item.price }} x {{ item.quantity }}</div> 
+             <div class="item-price">
+  ₹{{ getEffectiveItemPrice(item) }} x {{ item.quantity }}
+  <span *ngIf="getEffectiveItemPrice(item) < item.price" class="item-discount-tag">
+    (Offer Applied)
+  </span>
+</div>
           </div>
         </div>
       </div>
 
       <!-- Offers Section -->
-      <!-- Offers Dropdown or List -->
+      <!-- Offers Dropdown or List 
 <div class="offers-section" *ngIf="availableOffers.length > 0">
   <label>Available Offers:</label>
   <div *ngIf="errorMessage" class="offer-error">
@@ -51,7 +57,7 @@
   </div>
 </div>
 
-<!-- Show applied offer badge -->
+<!-- Show applied offer badge --
       <div *ngIf="selectedOffer" class="selected-offer">
         Offer Applied: {{ selectedOffer.title }}
         <button class="remove-offer-btn" (click)="removeOffer()">✖</button>
@@ -59,7 +65,7 @@
 
 
 
-      <!-- Totals -->
+      <!-- Totals --
       <div class="cart-footer">
         <div class="total" *ngIf="selectedOffer">
           Discounted Total: ₹{{ getDiscountedTotal(items) }}
@@ -69,10 +75,104 @@
         </div>
 
        
-        <!-- Checkout Button -->
+        <!-- Checkout Button --
         <button class="checkout-btn" (click)="openCheckout()">Checkout</button>
 
-        <!-- Checkout Modal -->
+        <!-- Checkout Modal --
+        <app-checkout-modal
+          *ngIf="showCheckoutModal"
+          [cartItems]="items"
+          [totalPrice]="getDiscountedTotal(items)"
+          (close)="closeCheckout()"
+        ></app-checkout-modal>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="cart-sidebar">
+  <div *ngIf="(cartItems$ | async) as items">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button class="close-btn" (click)="onClose()">×</button>
+    </div>
+
+    <div *ngIf="items.length === 0" class="empty-cart">
+      Your cart is empty.
+    </div>
+
+    <div *ngIf="items.length > 0">
+      <!-- Items -->
+      <div class="cart-items">
+        <div *ngFor="let item of items" class="cart-item">
+          <div class="item-info">
+            <div class="item-name-row">
+              <div class="item-name">{{ item.name }}</div>
+              <div class="item-quantity-controls">
+                <button (click)="decrement(item)">−</button>
+                <span>{{ item.quantity }}</span>
+                <button (click)="increment(item)">+</button>
+              </div>
+            </div>
+            <div class="item-price">
+              ₹{{ getEffectiveItemPrice(item) }} x {{ item.quantity }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Offers List -->
+      <div class="offers-section" *ngIf="availableOffers.length > 0">
+        <label>Available Offers:</label>
+        <div *ngIf="errorMessage" class="offer-error">{{ errorMessage }}</div>
+        <div class="offer-list">
+          <!-- <div 
+            *ngFor="let offer of availableOffers"
+            class="offer-item"
+            [class.selected]="selectedOffer?.id === offer.id"
+            [class.disabled]="selectedOffer?.id !== offer.id && selectedOffer?.menuItemId"
+            (click)="selectOffer(offer)">
+            <strong>{{ offer.title }}</strong><br />
+            <small>
+              {{ offer.offerType === 'FLAT' ? '₹' + offer.discountAmount + ' OFF' : offer.discountAmount + '% OFF' }}
+            </small>
+          </div> -->
+          <div 
+  *ngFor="let offer of availableOffers" 
+  class="offer-item"
+  [class.selected]="selectedOffer?.id === offer.id"
+  [class.disabled]="
+    selectedOffer?.menuItemId &&
+    offer.id !== selectedOffer?.id
+  "
+  (click)="
+    !(selectedOffer?.menuItemId && offer.id !== selectedOffer?.id)
+      && selectOffer(offer)
+  "
+>
+  <strong>{{ offer.title }}</strong><br />
+  <small>
+    {{ offer.offerType === 'FLAT' ? '₹' + offer.discountAmount + ' OFF' : offer.discountAmount + '% OFF' }}
+  </small>
+</div>
+
+        </div>
+      </div>
+
+      <!-- Show selected offer -->
+      <div *ngIf="selectedOffer" class="selected-offer">
+        Offer Applied: {{ selectedOffer.title }}
+        <button class="remove-offer-btn" (click)="removeOffer()">✖</button>
+      </div>
+
+      <!-- Totals -->
+      <div class="cart-footer">
+        <div class="total">
+          Discounted Total: ₹{{ getDiscountedTotal(items) }}
+        </div>
+
+        <button class="checkout-btn" (click)="openCheckout()">Checkout</button>
+
+
         <app-checkout-modal
           *ngIf="showCheckoutModal"
           [cartItems]="items"

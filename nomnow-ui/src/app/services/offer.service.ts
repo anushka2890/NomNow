@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Offer } from '../models/offer.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { OfferDTO } from '../models/offer.model';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +10,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class OfferService {
   private baseUrl = `${environment.apiUrl}/special-offers`;
 
-  private selectedOfferSubject = new BehaviorSubject<Offer | null>(null);
+  private selectedOfferSubject = new BehaviorSubject<OfferDTO | null>(null);
   selectedOffer$ = this.selectedOfferSubject.asObservable();
   constructor(private http: HttpClient) {}
 
-  applyOffer(offer: Offer) {
+  applyOffer(offer: OfferDTO) {
     this.selectedOfferSubject.next(offer);
   }
 
@@ -22,15 +22,21 @@ export class OfferService {
     this.selectedOfferSubject.next(null);
   }
 
-  getAllOffers(): Observable<Offer[]> {
-    return this.http.get<Offer[]>(this.baseUrl);
+  getAllOffers(): Observable<OfferDTO[]> {
+    return this.http.get<OfferDTO[]>(this.baseUrl);
   }
 
-  getOffersByCategory(category: string): Observable<Offer[]> {
-    return this.http.get<Offer[]>(`${this.baseUrl}/category/${category}`);
+  getOffersByCategory(category: string): Observable<OfferDTO[]> {
+    return this.http.get<OfferDTO[]>(`${this.baseUrl}/category/${category}`);
   }
 
-  getOffersByRestaurantId(id: number): Observable<Offer[]> {
-    return this.http.get<Offer[]>(`${this.baseUrl}/restaurant/${id}`);
+  getOffersByRestaurantId(id: number): Observable<OfferDTO[]> {
+    return this.http.get<OfferDTO[]>(`${this.baseUrl}/restaurant/${id}`);
+  }
+
+  getExclusiveItemOffers(): Observable<OfferDTO[]> {
+    return this.getAllOffers().pipe(
+      map(offers => offers.filter(o => !!o.menuItemId))
+    );
   }
 }

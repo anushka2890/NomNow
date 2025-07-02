@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Offer } from '../../models/offer.model';
+import { OfferDTO } from '../../models/offer.model';
 import { OfferService } from '../../services/offer.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -11,8 +11,8 @@ import { Router } from '@angular/router';
   styleUrl: './special-offers.component.css'
 })
 export class SpecialOffersComponent implements OnInit {
-  offers: Offer[] = [];
-  allOffers: Offer[] = [];
+  offers: OfferDTO[] = [];
+  allOffers: OfferDTO[] = [];
   categories: string[] = [];
   selectedCategory = '';
 

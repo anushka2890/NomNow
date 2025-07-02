@@ -29,6 +29,9 @@
             <h4>{{ item.name }}</h4>
             <p>{{ item.description }}</p>
             <p>₹{{ item.price }}</p>
+            <div *ngIf="item.offer" class="offer-badge">
+              <strong>Deal:</strong> ₹{{ item.offer.discountAmount }} OFF
+            </div>
             <button (click)="addToCart(item)">Add to Cart</button>
           </div>
         </div>

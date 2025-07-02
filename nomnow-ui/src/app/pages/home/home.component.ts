@@ -7,7 +7,7 @@ import { CategoryStripComponent } from "../../sections/category-strip/category-s
 import { FeaturedRestaurantsComponent } from "../../sections/featured-restaurants/featured-restaurants.component";
 import { ExclusiveDealsComponent } from "../../sections/exclusive-deals/exclusive-deals.component";
 import { HowItWorksComponent } from "../../sections/how-it-works/how-it-works.component";
-import { Restaurant, RestaurantDTO } from '../../models/restaurant';
+import { RestaurantDTO } from '../../models/restaurant';
 import { RestaurantService } from '../../services/restaurant.service';
 @Component({
   selector: 'app-home',
@@ -17,7 +17,7 @@ import { RestaurantService } from '../../services/restaurant.service';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit{
-  allRestaurants: Restaurant[] = [];
+  allRestaurants: RestaurantDTO[] = [];
   filteredRestaurants: any[] = [];
   popularRestaurants: any[] = [];
 
@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit{
 
     this.filteredRestaurants = this.allRestaurants.filter(rest =>
       rest.name.toLowerCase().includes(lowerQuery) ||
-      rest.menuItems?.some(item => item.name.toLowerCase().includes(lowerQuery))
+      rest.menuItemDTOList?.some(item => item.name.toLowerCase().includes(lowerQuery))
     );
   }
 

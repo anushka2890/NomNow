@@ -1,4 +1,9 @@
 /* cart-sidebar.component.css */
+.offer-item.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: not-allowed;
+}
 
 .cart-sidebar {
   position: fixed;

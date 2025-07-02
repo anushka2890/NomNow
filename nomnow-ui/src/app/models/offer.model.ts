@@ -1,4 +1,4 @@
-export interface Offer {
+export interface OfferDTO {
   id: number;
   title: string;
   description: string;
@@ -7,4 +7,5 @@ export interface Offer {
   restaurantId?: number;
   discountAmount: number;
   offerType: 'FLAT' | 'PERCENTAGE';
+  menuItemId: number;
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
+import { OfferDTO } from '../models/offer.model';
 export interface CartItem {
   id: number;
   name: string;
@@ -7,6 +8,7 @@ export interface CartItem {
   quantity: number;
   restaurantId: number;
   category?: string;
+  offer?: OfferDTO | null;
 }
 @Injectable({
   providedIn: 'root'

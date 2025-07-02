@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CartItem, CartService } from '../../services/cart.service';
-import { MenuItem, Restaurant, RestaurantDTO } from '../../models/restaurant';
+import { MenuItemDTO, RestaurantDTO } from '../../models/restaurant';
 import { RestaurantService } from '../../services/restaurant.service';
 
 @Component({
@@ -13,8 +13,8 @@ import { RestaurantService } from '../../services/restaurant.service';
 })
 export class RestaurantDetailComponent implements OnInit {
 
-  restaurant!: Restaurant;
-  groupedMenu: { [category: string]: MenuItem[] } = {};
+  restaurant!: RestaurantDTO;
+  groupedMenu: { [category: string]: MenuItemDTO[] } = {};
   categoryKeys: string[] = [];
 
   constructor(
@@ -28,15 +28,15 @@ export class RestaurantDetailComponent implements OnInit {
     this.restaurantService.getRestaurantById(id).subscribe({
       next: (data) => {
         this.restaurant = data;
-        this.groupedMenu = this.groupMenuItemsByCategory(data.menuItems);
+        this.groupedMenu = this.groupMenuItemsByCategory(data.menuItemDTOList);
         this.categoryKeys = Object.keys(this.groupedMenu);
       },
       error: (err) => console.error('Error loading restaurant', err)
     });
   }
 
-  groupMenuItemsByCategory(menuItems: MenuItem[]): { [key: string]: MenuItem[] } {
-    const grouped: { [key: string]: MenuItem[] } = {};
+  groupMenuItemsByCategory(menuItems: MenuItemDTO[]): { [key: string]: MenuItemDTO[] } {
+    const grouped: { [key: string]: MenuItemDTO[] } = {};
     for (const item of menuItems) {
       const category = item.category || 'Others';
       if (!grouped[category]) {
@@ -47,17 +47,18 @@ export class RestaurantDetailComponent implements OnInit {
     return grouped;
   }
 
-  addToCart(item: MenuItem): void {
+  addToCart(item: MenuItemDTO): void {
     const cartItem: CartItem = {
       id: item.id,
       name: item.name,
       price: item.price,
       quantity: 1,
       restaurantId: this.restaurant.id,
-      category: item.category
+      category: item.category,
+      offer: item.offer ?? null
     };
     this.cartService.setRestaurantId(this.restaurant.id);
     this.cartService.addToCart(cartItem);
-    alert(`${item.name} added to cart`);
+    // alert(`${item.name} added to cart`);
   }
 }
