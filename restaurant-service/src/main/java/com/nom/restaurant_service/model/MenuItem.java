@@ -21,6 +21,9 @@ public class MenuItem {
     @JsonBackReference
     private Restaurant restaurant;
 
+    @OneToOne(mappedBy = "menuItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Offer offer;
+
     public String getCategory() {
         return category;
     }
@@ -83,5 +86,13 @@ public class MenuItem {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public Offer getOffer() {
+        return offer;
+    }
+
+    public void setOffer(Offer offer) {
+        this.offer = offer;
     }
 }

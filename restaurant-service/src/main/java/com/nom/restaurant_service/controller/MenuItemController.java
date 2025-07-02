@@ -1,7 +1,9 @@
 package com.nom.restaurant_service.controller;
 
 import com.nom.restaurant_service.DTO.MenuItemDTO;
+import com.nom.restaurant_service.DTO.OfferDTO;
 import com.nom.restaurant_service.model.MenuItem;
+import com.nom.restaurant_service.model.Offer;
 import com.nom.restaurant_service.service.MenuItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,7 +36,8 @@ public class MenuItemController {
                         item.getPrice(),
                         item.getAvailableQuantity(),
                         item.getImageUrl(),
-                        item.getCategory()
+                        item.getCategory(),
+                        menuItemService.toOfferDTO(item.getOffer())
                 ))
                 .collect(Collectors.toList());
 

@@ -1,28 +1,31 @@
-package com.nom.restaurant_service.model;
+package com.nom.restaurant_service.DTO;
 
 import com.nom.restaurant_service.enums.OfferType;
-import jakarta.persistence.*;
-import lombok.Data;
 
-import java.time.LocalDateTime;
-
-@Entity
-public class Offer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class OfferDTO {
     private Long id;
-
     private String title;
     private String description;
     private String imageUrl;
     private String category;
     private Long restaurantId;
     private Integer discountAmount;
-    @Enumerated(EnumType.STRING)
     private OfferType offerType;
-    @OneToOne
-    @JoinColumn(name = "menu_item_id")
-    private MenuItem menuItem;
+    private Long menuItemId;
+
+    public OfferDTO(){}
+
+    public OfferDTO(Long id, String title, String description, String imageUrl, String category, Long restaurantId, Integer discountAmount, OfferType offerType, Long menuItemId) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.category = category;
+        this.restaurantId = restaurantId;
+        this.discountAmount = discountAmount;
+        this.offerType = offerType;
+        this.menuItemId = menuItemId;
+    }
 
     public Long getId() {
         return id;
@@ -88,11 +91,11 @@ public class Offer {
         this.offerType = offerType;
     }
 
-    public MenuItem getMenuItem() {
-        return menuItem;
+    public Long getMenuItemId() {
+        return menuItemId;
     }
 
-    public void setMenuItem(MenuItem menuItem) {
-        this.menuItem = menuItem;
+    public void setMenuItemId(Long menuItemId) {
+        this.menuItemId = menuItemId;
     }
 }

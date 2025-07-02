@@ -23,23 +23,26 @@ public class RestaurantController {
 
     @PostMapping
     @Operation(summary = "create a restaurant entry")
-    public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant){
-        Restaurant newRestaurant = restaurantService.createRestaurant(restaurant);
-        return new ResponseEntity<>(restaurant, HttpStatus.CREATED);
+    public ResponseEntity<RestaurantDTO> createRestaurant(@RequestBody Restaurant restaurant){
+        RestaurantDTO newRestaurant = restaurantService.createRestaurant(restaurant);
+        return new ResponseEntity<>(newRestaurant, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "find restaurant by id")
-    public ResponseEntity<Restaurant> findRestaurantById(@PathVariable Long id){
-        Restaurant restaurant = restaurantService.findRestaurantById(id);
+    public ResponseEntity<RestaurantDTO> findRestaurantById(@PathVariable Long id){
+        RestaurantDTO restaurant = restaurantService.findRestaurantById(id);
 
         return ResponseEntity.ok(restaurant);
     }
 
     @GetMapping
     @Operation(summary = "get all restaurants")
-    public ResponseEntity<List<Restaurant>> getAllRestaurants() {
-        return ResponseEntity.ok(restaurantService.getAllRestaurants());
+    public ResponseEntity<List<RestaurantDTO>> getAllRestaurants() {
+        return ResponseEntity.ok(restaurantService.getAllRestaurants()
+                .stream()
+                .map(restaurantService::toRestaurantDTO)
+                .collect(Collectors.toList()));
     }
 
     @DeleteMapping("/{id}")
@@ -51,7 +54,7 @@ public class RestaurantController {
 
     @PutMapping("/{id}")
     @Operation(summary = "update a restaurant")
-    public Restaurant updateRestaurant(@PathVariable Long id, @RequestBody Restaurant updatedRestaurant) {
+    public RestaurantDTO updateRestaurant(@PathVariable Long id, @RequestBody Restaurant updatedRestaurant) {
         return restaurantService.updateRestaurant(id, updatedRestaurant);
     }
 

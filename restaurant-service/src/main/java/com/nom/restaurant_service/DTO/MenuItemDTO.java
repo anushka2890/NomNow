@@ -8,10 +8,11 @@ public class MenuItemDTO {
     private int availableQuantity;
     private String imageUrl;
     private String category;
+    private OfferDTO offer;
 
     public MenuItemDTO() {}
 
-    public MenuItemDTO(Long id, String name, String description, Double price, int availableQuantity, String imageUrl, String category) {
+    public MenuItemDTO(Long id, String name, String description, Double price, int availableQuantity, String imageUrl, String category, OfferDTO offer) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -19,6 +20,7 @@ public class MenuItemDTO {
         this.availableQuantity = availableQuantity;
         this.imageUrl = imageUrl;
         this.category = category;
+        this.offer = offer;
     }
 
     public Long getId() {
@@ -59,5 +61,29 @@ public class MenuItemDTO {
 
     public void setAvailableQuantity(int availableQuantity) {
         this.availableQuantity = availableQuantity;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public OfferDTO getOffer() {
+        return offer;
+    }
+
+    public void setOffer(OfferDTO offer) {
+        this.offer = offer;
     }
 }
