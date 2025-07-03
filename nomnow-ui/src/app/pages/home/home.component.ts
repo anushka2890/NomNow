@@ -48,4 +48,12 @@ export class HomeComponent implements OnInit{
     this.filteredRestaurants = []; // close dropdown
     this.router.navigate(['/restaurant', restaurant.id]);
   }
+
+  filterByCategory(category: string) {
+  console.log('Filter restaurants/menu by category:', category);
+  // Example:
+  this.filteredRestaurants = this.allRestaurants.filter(rest =>
+    rest.menuItemDTOList.some(item => item.category === category)
+  );
+}
 }

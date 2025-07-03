@@ -1,10 +1,12 @@
 <section class="category-strip">
   <h2 class="section-title">Popular Categories 🍴</h2>
 
-  <div class="categories-container">
-    <div class="category-card" *ngFor="let category of categories">
-      <img [src]="category.image" [alt]="category.name" />
-      <span>{{ category.name }}</span>
+  <div class="category-scroll">
+    <div 
+      class="category-chip" 
+      *ngFor="let category of categories"
+      (click)="onCategoryClick(category)">
+      {{ category }}
     </div>
   </div>
 </section>

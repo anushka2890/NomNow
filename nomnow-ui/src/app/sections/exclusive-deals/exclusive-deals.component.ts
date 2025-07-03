@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MenuItemDTO } from '../../models/restaurant';
-import { OfferDTO } from '../../models/offer.model';
-import { OfferService } from '../../services/offer.service';
 import { RestaurantService } from '../../services/restaurant.service';
 import { map } from 'rxjs';
 import { CartItem, CartService } from '../../services/cart.service';

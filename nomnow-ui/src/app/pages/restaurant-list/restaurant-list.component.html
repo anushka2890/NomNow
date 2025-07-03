@@ -1,4 +1,21 @@
 <div class="restaurant-list-container">
+<div class="category-filter-bar">
+  <label for="category-select">Filter by Category:</label>
+  <select
+  id="category-select"
+  [(ngModel)]="selectedCategory"
+  (change)="onCategoryChange($event)"
+>
+
+    <option value="">All</option>
+    <option *ngFor="let category of allCategories" [value]="category">
+      {{ category }}
+    </option>
+  </select>
+
+  <button class="clear-btn" *ngIf="selectedCategory" (click)="clearCategory()">✖ Clear</button>
+</div>
+
   <h2 class="page-title">Popular Restaurants Near You</h2>
 
   <div class="restaurant-grid">
@@ -7,7 +24,7 @@
       *ngFor="let restaurant of restaurants"
       [routerLink]="['/restaurant', restaurant.id]"
     >
-      <!-- Placeholder image -->
+      
       <img
         [src]="restaurant.imageUrl"
         alt="{{ restaurant.name }}"
@@ -17,7 +34,6 @@
       <div class="restaurant-info">
         <h3>{{ restaurant.name }}</h3>
 
-        <!-- Dummy categories if none -->
         <p class="category">
           {{ restaurant.categories?.join(', ') || 'Multi Cuisine' }}
         </p>
@@ -32,3 +48,29 @@
     </div>
   </div>
 </div>
+<!-- <section class="restaurant-list-page">
+  <h2>🍽️ Explore Restaurants</h2>
+
+  <div class="category-filter-bar">
+    <label for="category-select">Filter by Category:</label>
+    <select id="category-select" (change)="onCategoryChange($event)" [value]="selectedCategory">
+      <option value="">All</option>
+      <option *ngFor="let category of allCategories" [value]="category">
+        {{ category }}
+      </option>
+    </select>
+    <button class="clear-btn" *ngIf="selectedCategory" (click)="clearCategory()">✖ Clear</button>
+  </div>
+
+  <div class="restaurant-grid">
+    <div class="restaurant-card" *ngFor="let restaurant of restaurants">
+      <img [src]="restaurant.imageUrl" [alt]="restaurant.name" />
+      <div class="restaurant-info">
+        <h3>{{ restaurant.name }}</h3>
+        <p>{{ restaurant.address }}</p>
+        <span class="rating">⭐ {{ restaurant.rating }}</span>
+        <span class="delivery-time">⏱ {{ restaurant.deliveryTime }} mins</span>
+      </div>
+    </div>
+  </div>
+</section> -->
