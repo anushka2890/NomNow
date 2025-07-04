@@ -1,51 +1,98 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Subscription, interval } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { OrderResponse } from '../../models/OrderResponse.model';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../../services/auth.service';
+import { OrderTrackingService } from '../../services/order-tracking.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-order-status',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './order-status.component.html',
-  styleUrl: './order-status.component.css',
-  standalone: true
+  styleUrl: './order-status.component.css'
 })
-export class OrderStatusComponent implements OnInit, OnDestroy{
-
-  @Input() orderId! :number;
+export class OrderStatusComponent implements OnInit, OnDestroy {
+  @Input() orderId!: number;
   order?: OrderResponse;
-  pollingSubscription?: Subscription;
+  statusSubscription?: Subscription;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private auth: AuthService ) {}
+  allStatusSteps: string[] = [
+    'PENDING',
+    'ORDER_CONFIRMED',
+    'PAYMENT_SUCCESS',
+    'PREPARING',
+    'OUT_FOR_DELIVERY',
+    'DELIVERED'
+  ];
+
+  failureStatuses: string[] = ['PAYMENT_FAILED', 'CANCELLED'];
+
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private auth: AuthService,
+    private orderTrackingService: OrderTrackingService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.orderId = Number(this.route.snapshot.paramMap.get('id'));
     if (!this.orderId) {
-       console.error('Order ID route param is missing or invalid');
-       return;
-     }
-     const token = this.auth.getToken();
-     const headers = new HttpHeaders({
+      console.error('Order ID route param is missing or invalid');
+      return;
+    }
+
+    const token = this.auth.getToken();
+    const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
-    this.pollingSubscription = interval(5000).subscribe(() => {
-      this.http.get<OrderResponse>(`${environment.apiUrl}/orders/${this.orderId}`, { headers })
-      .subscribe(data => {
+
+    this.http.get<OrderResponse>(`${environment.apiUrl}/orders/${this.orderId}`, { headers })
+      .subscribe((data) => {
         this.order = data;
-        if(['PAYMENT_SUCCESS', 'PAYMENT_FAILED'].includes(this.order.status)){
-          this.pollingSubscription?.unsubscribe();
-        }
+        this.orderTrackingService.connect(this.orderId);
+
+        this.statusSubscription = this.orderTrackingService.orderStatus$.subscribe((status: string) => {
+          if (this.order && this.order.status !== status && status !== 'INITIAL') {
+            const oldStatus = this.order.status;
+            this.order.status = status;
+
+            this.snackBar.open(
+              `📦 Order status updated: ${this.getReadableStatus(status)}`,
+              'OK',
+              { duration: 3000 }
+            );
+
+            console.log(`🧭 Order status changed from ${oldStatus} → ${status}`);
+          }
+        });
       });
-    });
   }
 
   ngOnDestroy(): void {
-    this.pollingSubscription?.unsubscribe();
+    this.statusSubscription?.unsubscribe();
+    this.orderTrackingService.disconnect();
   }
 
+  getReadableStatus(status: string): string {
+    return status.replace(/_/g, ' ');
+  }
+
+  isFailureStatus(): boolean {
+    return this.failureStatuses.includes(this.order?.status || '');
+  }
+
+  getProgressSteps(): string[] {
+    const currentStatus = this.order?.status;
+    if (!currentStatus || this.isFailureStatus()) return [];
+
+    const index = this.allStatusSteps.indexOf(currentStatus);
+    return index >= 0 ? this.allStatusSteps.slice(0, index + 1) : [];
+  }
 }
