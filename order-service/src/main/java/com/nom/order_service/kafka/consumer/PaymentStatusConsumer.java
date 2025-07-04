@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nom.order_service.DTO.PaymentStatusDTO;
 import com.nom.order_service.enums.OrderStatus;
 import com.nom.order_service.enums.PaymentStatus;
+import com.nom.order_service.mapper.OrderMapper;
 import com.nom.order_service.model.Order;
 import com.nom.order_service.repository.OrderRepository;
+import com.nom.order_service.websocket.OrderStatusBroadcaster;
 import org.aspectj.weaver.ast.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +28,13 @@ public class PaymentStatusConsumer {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private OrderStatusBroadcaster orderStatusBroadcaster;
+
     @KafkaListener(topics = "payment_status", groupId = "nomnow-group")
     public void consumePaymentStatus(String message) throws JsonProcessingException {
         PaymentStatusDTO paymentStatus = objectMapper.readValue(message, PaymentStatusDTO.class);
-        Optional<Order> optionalOrder = orderRepository.findById(paymentStatus.getOrderId());
+        Optional<Order> optionalOrder = orderRepository.findByIdWithItems(paymentStatus.getOrderId());
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
             if (paymentStatus.getStatus().equals(PaymentStatus.SUCCESS)){
@@ -38,7 +43,33 @@ public class PaymentStatusConsumer {
                 order.setOrderStatus(OrderStatus.PAYMENT_FAILED);
             }
             orderRepository.save(order);
+            orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
             log.info("Updated order status to {}", paymentStatus.getStatus());
+            if(order.getOrderStatus().equals(OrderStatus.PAYMENT_SUCCESS)){
+                // After setting PAYMENT_SUCCESS
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(3000); // 3s delay - preparing
+                        order.setOrderStatus(OrderStatus.PREPARING);
+                        orderRepository.save(order);
+                        orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
+
+                        Thread.sleep(3000); // 3s delay - out for delivery
+                        order.setOrderStatus(OrderStatus.OUT_FOR_DELIVERY);
+                        orderRepository.save(order);
+                        orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
+
+                        Thread.sleep(5000); // 5s delay - delivered
+                        order.setOrderStatus(OrderStatus.DELIVERED);
+                        orderRepository.save(order);
+                        orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
+
+                        log.info("Order {} has been delivered", order.getId());
+                    } catch (InterruptedException e) {
+                        log.error("Error simulating order lifecycle", e);
+                    }
+                }).start();
+            }
         } else {
             log.error("Order ID not found: {}", paymentStatus.getOrderId());
         }

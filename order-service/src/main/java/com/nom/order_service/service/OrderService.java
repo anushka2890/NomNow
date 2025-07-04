@@ -12,6 +12,7 @@ import com.nom.order_service.mapper.OrderMapper;
 import com.nom.order_service.model.Order;
 import com.nom.order_service.model.OrderItem;
 import com.nom.order_service.repository.OrderRepository;
+import com.nom.order_service.websocket.OrderStatusBroadcaster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ import java.util.List;
 @Service
 public class OrderService {
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
+
+    @Autowired
+    private OrderStatusBroadcaster orderStatusBroadcaster;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -52,6 +56,7 @@ public class OrderService {
         }
 
         Order savedOrder = orderRepository.save(order);
+        orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(savedOrder));
         OrderResponseDTO kafkaMessage = OrderMapper.toDTO(savedOrder);
         restaurantRequestProducer.sendRestaurantRequest(kafkaMessage);
 
@@ -77,7 +82,7 @@ public class OrderService {
 
     public void updateOrderStatus(Long orderId, OrderStatus newStatus) {
         log.info("Updating status for orderId={} to {}", orderId, newStatus);
-        Order order = orderRepository.findById(orderId)
+        Order order = orderRepository.findByIdWithItems(orderId)
                 .orElseThrow(() -> {
                     log.warn("Order not found with ID={}", orderId);
                     return new OrderNotFound("Order not found with ID: " + orderId);
@@ -85,6 +90,7 @@ public class OrderService {
 
         order.setOrderStatus(newStatus);
         orderRepository.save(order);
+        orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
     }
 
     public void deleteOrder(Long orderId) {
@@ -96,13 +102,15 @@ public class OrderService {
 
     public OrderResponseDTO cancelOrder(Long orderId) {
         log.info("Cancelling order with ID={}", orderId);
-        Order order = orderRepository.findById(orderId)
+        Order order = orderRepository.findByIdWithItems(orderId)
                 .orElseThrow(() -> {
                     log.warn("Order not found with ID={}", orderId);
                     return new OrderNotFound("Order not found with ID: " + orderId);
                 });
         order.setOrderStatus(OrderStatus.CANCELLED);
-        return OrderMapper.toDTO(orderRepository.save(order));
+        Order savedOrder = orderRepository.save(order);
+        orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(savedOrder));
+        return OrderMapper.toDTO(savedOrder);
     }
 
     public List<OrderResponseDTO> getAllOrders() {

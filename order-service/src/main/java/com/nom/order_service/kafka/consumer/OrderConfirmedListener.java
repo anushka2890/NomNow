@@ -5,8 +5,10 @@ import com.nom.order_service.DTO.OrderStatusFromRestaurantDTO;
 import com.nom.order_service.DTO.PaymentRequestDTO;
 import com.nom.order_service.enums.OrderStatus;
 import com.nom.order_service.kafka.producer.PaymentRequestProducer;
+import com.nom.order_service.mapper.OrderMapper;
 import com.nom.order_service.model.Order;
 import com.nom.order_service.repository.OrderRepository;
+import com.nom.order_service.websocket.OrderStatusBroadcaster;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,9 @@ public class OrderConfirmedListener {
     @Autowired
     private PaymentRequestProducer paymentRequestProducer;
 
+    @Autowired
+    private OrderStatusBroadcaster orderStatusBroadcaster;
+
     private static final Logger log = LoggerFactory.getLogger(OrderConfirmedListener.class);
 
     @KafkaListener(topics = "order_confirmed", groupId = "order-group")
@@ -36,13 +41,17 @@ public class OrderConfirmedListener {
         try {
             confirmedOrder = objectMapper.readValue(message, OrderStatusFromRestaurantDTO.class);
             log.info("Received order confirmation: {}", confirmedOrder);
-            Optional<Order> optionalOrder = orderRepository.findById(confirmedOrder.getId());
+            Optional<Order> optionalOrder = orderRepository.findByIdWithItems(confirmedOrder.getId());
             if (optionalOrder.isPresent()){
                 Order order = optionalOrder.get();
                 if(OrderStatus.CONFIRMED.equals(confirmedOrder.getStatus())){
                     order.setOrderStatus(OrderStatus.CONFIRMED);
+                    orderRepository.save(order);
+                    orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
+
                     order.setOrderStatus(OrderStatus.PAYMENT_PENDING);
                     orderRepository.save(order);
+                    orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
 
                     PaymentRequestDTO paymentDTO = new PaymentRequestDTO();
                     paymentDTO.setOrderId(order.getId());
@@ -53,9 +62,11 @@ public class OrderConfirmedListener {
                 } else if ("REJECTED".equals(confirmedOrder.getStatus())) {
                     order.setOrderStatus(OrderStatus.REJECTED);
                     orderRepository.save(order);
+                    orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
                 } else {
                     order.setOrderStatus(OrderStatus.CANCELLED);
                     orderRepository.save(order);
+                    orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
                 }
             } else {
                 log.warn("Order ID {} not found in DB", confirmedOrder.getId());
