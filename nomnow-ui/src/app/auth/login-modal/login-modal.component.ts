@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SignupModalComponent } from '../signup-modal/signup-modal.component';
 import { AuthModalWrapperComponent } from '../auth-modal-wrapper/auth-modal-wrapper.component';
 import { AuthService } from '../../services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login-modal',
@@ -31,7 +32,8 @@ export class LoginModalComponent implements OnInit {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<LoginModalComponent>,
     private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -48,7 +50,10 @@ export class LoginModalComponent implements OnInit {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
-        alert('Login successful!');
+        this.snackBar.open('✅ Login successful!', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-success']
+      });
         this.dialogRef.close();
       },
       error: err => {
