@@ -95,4 +95,28 @@ export class OrderStatusComponent implements OnInit, OnDestroy {
     const index = this.allStatusSteps.indexOf(currentStatus);
     return index >= 0 ? this.allStatusSteps.slice(0, index + 1) : [];
   }
+  canCancel(): boolean {
+    const cancellableStatuses = [
+      'PENDING',
+      'CONFIRMED',
+      'PAYMENT_PENDING',
+      'PAYMENT_SUCCESS'
+    ];
+    return this.order ? cancellableStatuses.includes(this.order.status) : false;
+  }
+
+  cancelOrder(): void{
+    if(!this.order) return;
+    this.http.put(`${environment.apiUrl}/orders/${this.order.orderId}/cancel`, {})
+    .subscribe({
+      next: () => {
+        this.snackBar.open('Order cancelled successfully ✅', 'OK', { duration: 3000 });
+        this.order!.status = 'CANCELLED';
+      },
+      error: (err) => {
+        console.error('Cancel failed', err);
+        this.snackBar.open('Failed to cancel order ❌', 'OK', { duration: 3000 });
+      }
+    });
+  }
 }

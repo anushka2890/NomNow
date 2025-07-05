@@ -49,17 +49,17 @@ public class PaymentStatusConsumer {
                 // After setting PAYMENT_SUCCESS
                 new Thread(() -> {
                     try {
-                        Thread.sleep(3000); // 3s delay - preparing
+                        Thread.sleep(30000); // 3s delay - preparing
                         order.setOrderStatus(OrderStatus.PREPARING);
                         orderRepository.save(order);
                         orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
 
-                        Thread.sleep(3000); // 3s delay - out for delivery
+                        Thread.sleep(30000); // 3s delay - out for delivery
                         order.setOrderStatus(OrderStatus.OUT_FOR_DELIVERY);
                         orderRepository.save(order);
                         orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
 
-                        Thread.sleep(5000); // 5s delay - delivered
+                        Thread.sleep(50000); // 5s delay - delivered
                         order.setOrderStatus(OrderStatus.DELIVERED);
                         orderRepository.save(order);
                         orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));

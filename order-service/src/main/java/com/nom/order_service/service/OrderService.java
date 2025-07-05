@@ -107,10 +107,16 @@ public class OrderService {
                     log.warn("Order not found with ID={}", orderId);
                     return new OrderNotFound("Order not found with ID: " + orderId);
                 });
-        order.setOrderStatus(OrderStatus.CANCELLED);
-        Order savedOrder = orderRepository.save(order);
-        orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(savedOrder));
-        return OrderMapper.toDTO(savedOrder);
+        if (order.getOrderStatus() == OrderStatus.PENDING ||
+                order.getOrderStatus() == OrderStatus.CONFIRMED ||
+                order.getOrderStatus() == OrderStatus.PAYMENT_PENDING ||
+                order.getOrderStatus() == OrderStatus.PAYMENT_SUCCESS) {
+
+            order.setOrderStatus(OrderStatus.CANCELLED);
+            orderRepository.save(order);
+            orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
+        }
+        return OrderMapper.toDTO(order);
     }
 
     public List<OrderResponseDTO> getAllOrders() {
