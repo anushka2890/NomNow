@@ -39,36 +39,45 @@ public class PaymentStatusConsumer {
             Order order = optionalOrder.get();
             if (paymentStatus.getStatus().equals(PaymentStatus.SUCCESS)){
                 order.setOrderStatus(OrderStatus.PAYMENT_SUCCESS);
-            }else{
-                order.setOrderStatus(OrderStatus.PAYMENT_FAILED);
-            }
-            orderRepository.save(order);
-            orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
-            log.info("Updated order status to {}", paymentStatus.getStatus());
-            if(order.getOrderStatus().equals(OrderStatus.PAYMENT_SUCCESS)){
-                // After setting PAYMENT_SUCCESS
+                orderRepository.save(order);
+                orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
                 new Thread(() -> {
                     try {
-                        Thread.sleep(30000); // 3s delay - preparing
-                        order.setOrderStatus(OrderStatus.PREPARING);
-                        orderRepository.save(order);
-                        orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
+                        Thread.sleep(30000);
 
-                        Thread.sleep(30000); // 3s delay - out for delivery
-                        order.setOrderStatus(OrderStatus.OUT_FOR_DELIVERY);
-                        orderRepository.save(order);
-                        orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
+                        // 🔐 Check latest status before proceeding
+                        Optional<Order> maybe = orderRepository.findByIdWithItems(order.getId());
+                        if (maybe.isEmpty() || maybe.get().getOrderStatus().equals(OrderStatus.CANCELLED)) return;
 
-                        Thread.sleep(50000); // 5s delay - delivered
-                        order.setOrderStatus(OrderStatus.DELIVERED);
-                        orderRepository.save(order);
-                        orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
+                        Order updated = maybe.get();
+                        updated.setOrderStatus(OrderStatus.PREPARING);
+                        orderRepository.save(updated);
+                        orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(updated));
 
-                        log.info("Order {} has been delivered", order.getId());
+                        Thread.sleep(30000);
+
+                        updated = maybe.get();
+                        updated.setOrderStatus(OrderStatus.OUT_FOR_DELIVERY);
+                        orderRepository.save(updated);
+                        orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(updated));
+
+                        Thread.sleep(50000);
+
+                        updated = maybe.get();
+                        updated.setOrderStatus(OrderStatus.DELIVERED);
+                        orderRepository.save(updated);
+                        orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(updated));
+
+                        log.info("Order {} has been delivered", updated.getId());
                     } catch (InterruptedException e) {
                         log.error("Error simulating order lifecycle", e);
                     }
                 }).start();
+            }else{
+                order.setOrderStatus(OrderStatus.PAYMENT_FAILED);
+                orderRepository.save(order);
+                orderStatusBroadcaster.sendStatusUpdate(OrderMapper.toDTO(order));
+                log.info("Updated order status to PAYMENT_FAILED");
             }
         } else {
             log.error("Order ID not found: {}", paymentStatus.getOrderId());
