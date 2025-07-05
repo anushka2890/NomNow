@@ -1,3 +1,10 @@
+<app-delivery-tracking
+  *ngIf="order?.status === 'OUT_FOR_DELIVERY'"
+  [restaurantCoords]="[restaurantLat, restaurantLng]"
+  [deliveryCoords]="[deliveryLat, deliveryLng]"
+/>
+
+
 <div *ngIf="order; else loading" class="order-status-container">
   <h2>Order #{{ order.orderId }}</h2>
   <p><strong>Status:</strong> {{ getReadableStatus(order.status) }}</p>

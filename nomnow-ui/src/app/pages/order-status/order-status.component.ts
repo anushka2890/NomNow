@@ -8,11 +8,12 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from '../../services/auth.service';
 import { OrderTrackingService } from '../../services/order-tracking.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DeliveryTrackingComponent } from "../../sections/delivery-tracking/delivery-tracking.component";
 
 @Component({
   selector: 'app-order-status',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DeliveryTrackingComponent],
   templateUrl: './order-status.component.html',
   styleUrl: './order-status.component.css'
 })
@@ -31,6 +32,7 @@ export class OrderStatusComponent implements OnInit, OnDestroy {
   ];
 
   failureStatuses: string[] = ['PAYMENT_FAILED', 'CANCELLED'];
+  deliveryCoordinates: [number, number] = [19.0760, 72.8777]; // Set dynamically if needed
 
   constructor(
     private http: HttpClient,
@@ -118,5 +120,20 @@ export class OrderStatusComponent implements OnInit, OnDestroy {
         this.snackBar.open('Failed to cancel order ❌', 'OK', { duration: 3000 });
       }
     });
+  }
+  get restaurantLat(): number {
+    return 19.0760; // Mumbai example
+  }
+
+  get restaurantLng(): number {
+    return 72.8777;
+  }
+
+  get deliveryLat(): number {
+    return 19.0950;
+  }
+
+  get deliveryLng(): number {
+    return 72.8850;
   }
 }
