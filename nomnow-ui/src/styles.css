@@ -2,7 +2,15 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
+.main-content {
+  flex: 1;
+}
 .success-snackbar {
   background-color: #43a047 !important; /* Material green */
   color: white !important;
