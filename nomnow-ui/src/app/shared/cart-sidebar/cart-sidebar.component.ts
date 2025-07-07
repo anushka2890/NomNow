@@ -102,14 +102,14 @@ export class CartSidebarComponent implements OnInit {
   }
 
   increment(item: CartItem): void {
-    item.quantity++;
-    this.cartService.updateCartItem(item);
+    const updatedItem = { ...item, quantity: item.quantity + 1 };
+    this.cartService.updateCartItem(updatedItem);
   }
 
   decrement(item: CartItem): void {
     if (item.quantity > 1) {
-      item.quantity--;
-      this.cartService.updateCartItem(item);
+      const updatedItem = { ...item, quantity: item.quantity - 1 };
+      this.cartService.updateCartItem(updatedItem);
     } else {
       this.cartService.removeItem(item.name);
     }

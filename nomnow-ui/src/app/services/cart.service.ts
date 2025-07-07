@@ -10,6 +10,8 @@ export interface CartItem {
   category?: string;
   offer?: OfferDTO | null;
 }
+const CART_KEY = "nomnow_cart";
+
 @Injectable({
   providedIn: 'root'
 })
@@ -39,16 +41,19 @@ export class CartService {
       this.cartItems.push(item);
     }
     this.cartSubject.next(this.cartItems);
+    this.saveCartToLocalStorage();
   }
 
   removeItem(itemName: string) {
     this.cartItems = this.cartItems.filter(i => i.name !== itemName);
     this.cartSubject.next(this.cartItems);
+    this.saveCartToLocalStorage();
   }
 
   clearCart() {
     this.cartItems = [];
     this.cartSubject.next(this.cartItems);
+    localStorage.removeItem(CART_KEY);
   }
 
   getCartTotal(): Observable<number> {
@@ -61,8 +66,37 @@ export class CartService {
     if (index !== -1) {
       this.cartItems[index] = updatedItem;
       this.cartSubject.next(this.cartItems);
+      this.saveCartToLocalStorage();
     }
   }
 
-  constructor() { }
+  constructor() { 
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      this.loadCartFromLocalStorage();
+    }
+  }
+
+  private saveCartToLocalStorage() {
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      localStorage.setItem(CART_KEY, JSON.stringify(this.cartItems));
+    }
+  }
+
+  private loadCartFromLocalStorage() {
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      const data = localStorage.getItem(CART_KEY);
+      if (data) {
+        this.cartItems = JSON.parse(data);
+        this.cartSubject.next(this.cartItems);
+      }
+    }
+  }
+
+  getItems(): CartItem[] {
+    return [...this.cartItems];
+  }
+
+  hasItems(): boolean {
+    return this.cartItems.length > 0;
+  } 
 }
