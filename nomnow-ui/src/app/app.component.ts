@@ -14,19 +14,20 @@ import { FooterComponent } from "./shared/footer/footer.component";
 import { CartUiService } from './services/cart-ui.service';
 import { CartSidebarComponent } from "./shared/cart-sidebar/cart-sidebar.component";
 import { Observable } from 'rxjs';
+import { ChatbotComponent } from "./shared/chatbot/chatbot.component";
 @Component({
   selector: 'app-root',
   standalone: true, // this is the trick: this component is standalone
   imports: [RouterModule, HttpClientModule,
     HeaderComponent, MatSnackBarModule,
     NavbarComponent, HeroComponent,
-    NgIf,         // for *ngIf
-    AsyncPipe,    // for | async
+    NgIf, // for *ngIf
+    AsyncPipe, // for | async
     CategoryStripComponent,
     FeaturedRestaurantsComponent,
     ExclusiveDealsComponent,
     HowItWorksComponent,
-    FooterComponent, CartSidebarComponent],
+    FooterComponent, CartSidebarComponent, ChatbotComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
@@ -38,5 +39,10 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.showCartSidebar$ = this.cartUiService.sidebarVisible$;
+  }
+  isChatVisible = false;
+
+  toggleSupportChat() {
+    this.isChatVisible = !this.isChatVisible;
   }
 }

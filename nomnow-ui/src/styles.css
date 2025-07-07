@@ -20,3 +20,35 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background-color: #e53935 !important; /* Material red */
   color: white !important;
 }
+/* In global styles or the component's CSS */
+.support-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  padding: 12px 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.support-button:hover {
+  background-color: #388e3c;
+}
+
+.chatbot-float {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 300px;
+  height: 400px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  z-index: 9998;
+}
