@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { ChatMessage } from '../models/chatMessage.model';
@@ -8,11 +8,22 @@ import { ChatMessage } from '../models/chatMessage.model';
 })
 export class ChatService {
   private API_URL = 'http://localhost:5007/chat';
+  private sessionId = localStorage.getItem('df-session') || this.generateSessionId();
+
+private generateSessionId(): string {
+  const id = Math.random().toString(36).substring(2);
+  localStorage.setItem('df-session', id);
+  return id;
+}
 
   constructor(private http: HttpClient) { }
 
   sendMessage(message: string): Observable<ChatMessage> {
-  return this.http.post<any>(this.API_URL, { message }).pipe(
+    const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'x-session-id': this.sessionId
+  });
+  return this.http.post<any>(this.API_URL, { message }, {headers}).pipe(
     map(res => {
       const fulfillment = res.reply;
 

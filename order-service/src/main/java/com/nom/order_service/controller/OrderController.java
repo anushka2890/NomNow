@@ -72,4 +72,9 @@ public class OrderController {
         System.out.println("🔍 Was request from API Gateway? => " + fromGateway);
         return "Order service reached. From gateway: " + fromGateway;
     }
+
+    @GetMapping("/status/{orderId}")
+    public ResponseEntity<String> fetchOrderStatus(@PathVariable Long orderId){
+        return ResponseEntity.ok(orderService.getOrderById(orderId).getStatus().toString());
+    }
 }
