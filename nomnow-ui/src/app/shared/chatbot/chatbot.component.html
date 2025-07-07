@@ -1,10 +1,16 @@
 <div class="chat-container">
   <div class="messages">
-    <div *ngFor="let msg of messages" [class.user]="msg.isUser" [class.bot]="!msg.isUser">
+    <div *ngFor="let msg of messages" class="message" [ngClass]="msg.sender">
       {{ msg.text }}
+      <div *ngIf="msg.suggestions?.length" class="suggestions">
+  <button *ngFor="let suggestion of msg.suggestions" (click)="sendMessage(suggestion)">
+    {{ suggestion }}
+  </button>
+</div>
+
     </div>
   </div>
-  <form (ngSubmit)="sendMessage()" class="input-form">
+  <form (ngSubmit)="sendMessage(userInput)" class="input-form">
     <input [(ngModel)]="userInput" name="userInput" placeholder="Type your message..." />
     <button type="submit">Send</button>
   </form>

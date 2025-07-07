@@ -59,7 +59,15 @@ app.post('/chat', async (req, res) => {
   try {
     const responses = await sessionClient.detectIntent(request);
     const result = responses[0].queryResult;
-    res.json({ reply: result.fulfillmentText });
+    res.json({
+      reply: result.fulfillmentText,
+      details: {
+        responseMessages: result.fulfillmentMessages || []
+      }
+    });
+
+    console.log('🎯 Full Dialogflow response:', JSON.stringify(result, null, 2));
+
   } catch (err) {
     console.error('🛑 Dialogflow Error:');
   console.dir(err, { depth: null });

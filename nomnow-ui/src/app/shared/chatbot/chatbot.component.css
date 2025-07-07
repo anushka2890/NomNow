@@ -54,3 +54,16 @@
   margin-left: 10px;
   padding: 6px 12px;
 }
+.suggestions {
+  display: flex;
+  gap: 8px;
+  margin-top: 5px;
+}
+.suggestions button {
+  background-color: #e0f7fa;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
+import { ChatMessage } from '../../models/chatMessage.model';
 
 @Component({
   selector: 'app-chatbot',
@@ -11,27 +12,17 @@ import { ChatService } from '../../services/chat.service';
   standalone: true
 })
 export class ChatbotComponent {
-  messages: { text: string; isUser: boolean }[] = [];
+  messages: ChatMessage[] = [];
   userInput = '';
 constructor(private chatService: ChatService) {}
 
-  sendMessage() {
-    if (!this.userInput.trim()) return;
+sendMessage(userInput: string) {
+  if (!userInput.trim()) return;
 
-    const message = this.userInput.trim();
-    this.messages.push({ text: message, isUser: true });
-    this.userInput = '';
+  this.messages.push({ text: userInput, sender: 'user' });
+  this.chatService.sendMessage(userInput).subscribe(res => {
+    this.messages.push(res);
+  });
+}
 
-    this.chatService.sendMessage(message).subscribe({
-      next: (response) => {
-        this.messages.push({ text: response.reply, isUser: false });
-      },
-      error: () => {
-        this.messages.push({
-          text: 'Sorry, something went wrong.',
-          isUser: false,
-        });
-      },
-    });
-  }
 }
