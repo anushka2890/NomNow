@@ -1,17 +1,37 @@
 <div class="chat-container">
-  <div class="messages">
-    <div *ngFor="let msg of messages" class="message" [ngClass]="msg.sender">
-      {{ msg.text }}
-      <div *ngIf="msg.suggestions?.length" class="suggestions">
-  <button *ngFor="let suggestion of msg.suggestions" (click)="sendMessage(suggestion)">
-    {{ suggestion }}
-  </button>
-</div>
+  <div class="chat-header">
+    🤖 <strong>NomNow Assistant</strong>
+    <button class="close-btn" (click)="closeChat()">✕</button>
+  </div>
 
+  <div class="chat-messages">
+    <div
+      *ngFor="let msg of messages"
+      [ngClass]="{ 'user-msg': msg.sender === 'user', 'bot-msg': msg.sender === 'bot' }"
+      class="chat-bubble"
+    >
+      {{ msg.text }}
+    </div>
+
+    <div *ngIf="isBotTyping" class="typing-indicator">
+      NomNow is typing<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
     </div>
   </div>
-  <form (ngSubmit)="sendMessage(userInput)" class="input-form">
-    <input [(ngModel)]="userInput" name="userInput" placeholder="Type your message..." />
-    <button type="submit">Send</button>
-  </form>
+
+  <div *ngIf="suggestions.length" class="suggestions">
+    <button *ngFor="let suggestion of suggestions" (click)="onSuggestionClick(suggestion)">
+      {{ suggestion }}
+    </button>
+  </div>
+
+  <div class="chat-input">
+    <input
+    type="text"
+    [(ngModel)]="userInput"
+    (keyup.enter)="sendMessage()"
+    placeholder="Type your message..."
+  />
+  <button (click)="sendMessage()">➤</button>
+
+  </div>
 </div>

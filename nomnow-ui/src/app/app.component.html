@@ -15,7 +15,7 @@
   <button class="support-button" (click)="toggleSupportChat()">
     💬 Help
   </button>
-  <app-chatbot *ngIf="isChatVisible" class="chatbot-float"></app-chatbot>
+  <app-chatbot *ngIf="isChatVisible" class="chatbot-float" (close)="toggleSupportChat()"></app-chatbot>
 
   <app-footer></app-footer>
 </div>
