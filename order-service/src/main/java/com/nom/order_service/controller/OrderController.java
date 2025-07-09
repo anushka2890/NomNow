@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +25,20 @@ public class OrderController {
 
     @PostMapping
     @Operation(summary = "Place a new order")
-    public ResponseEntity<OrderResponseDTO> placeOrder(@Valid @RequestBody OrderRequestDTO orderRequestDTO) throws JsonProcessingException {
-        return ResponseEntity.ok(orderService.placeOrder(orderRequestDTO));
+    public ResponseEntity<OrderResponseDTO> placeOrder(
+            @Valid @RequestBody OrderRequestDTO orderRequestDTO,
+            @RequestHeader(value = "X-User-Id") String userIdHeader)
+            throws JsonProcessingException
+    {
+        long userId;
+        try {
+            userId = Long.parseLong(userIdHeader);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(null); // or throw exception
+        }
+        OrderResponseDTO createdOrder = orderService.placeOrder(orderRequestDTO, userId);
+        return ResponseEntity.ok(createdOrder);
     }
 
     @GetMapping("/{orderId}")

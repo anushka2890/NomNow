@@ -35,12 +35,12 @@ public class OrderService {
     @Autowired
     private RestaurantRequestProducer restaurantRequestProducer;
 
-    public OrderResponseDTO placeOrder(OrderRequestDTO orderRequestDTO) throws JsonProcessingException {
-        log.info("Placing new order for userId={} with {} items", orderRequestDTO.getUserId(), orderRequestDTO.getItems().size());
+    public OrderResponseDTO placeOrder(OrderRequestDTO orderRequestDTO, Long userId) throws JsonProcessingException {
+        log.info("Placing new order for userId={} with {} items", userId, orderRequestDTO.getItems().size());
         log.debug("Order details: {}", orderRequestDTO);
 
         Order order = new Order();
-        order.setUserId(orderRequestDTO.getUserId());
+        order.setUserId(userId);
         order.setOrderStatus(OrderStatus.PENDING); // set initial status to PENDING
         order.setOrderDate(LocalDateTime.now());
         order.setDeliveryAddress(orderRequestDTO.getAddress());

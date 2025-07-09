@@ -8,8 +8,8 @@ import lombok.Data;
 import java.util.List;
 @Data
 public class OrderRequestDTO {
-    @NotNull(message = "User Id is required")
-    private Long userId;
+//    @NotNull(message = "User Id is required")
+//    private Long userId;
     @NotEmpty(message = "Order Items are required")
     private List<OrderItemDTO> items;
     @NotBlank(message = "Delivery Address is required")
@@ -34,13 +34,13 @@ public class OrderRequestDTO {
         this.restaurantId = restaurantId;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+//    public Long getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(Long userId) {
+//        this.userId = userId;
+//    }
 
     public List<OrderItemDTO> getItems() {
         return items;
