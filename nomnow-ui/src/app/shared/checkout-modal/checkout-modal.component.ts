@@ -26,8 +26,6 @@ export class CheckoutModalComponent implements OnInit {
   @Input() totalPrice: number = 0;
   
   @Output() close = new EventEmitter<void>();
-
-  userId?: number;
   loggedInUser?: UserDTO;
 
   addresses: Address[] = [];
@@ -53,14 +51,6 @@ export class CheckoutModalComponent implements OnInit {
   
   ngOnInit(): void {
     this.restaurantId = this.cartService.getRestaurantId();
-
-    const user = this.userService.getLoggedInUser();
-    if (user) {
-      this.userId = user.id;
-      this.fetchSavedAddresses();
-    } else {
-      console.error('Failed to load user profile');
-    }
   }
   fetchSavedAddresses(): void {
     this.addressService.getUserAddress().subscribe({
@@ -98,7 +88,6 @@ export class CheckoutModalComponent implements OnInit {
     );
 
     const orderPayload = {
-      userId: this.userId,
       address: this.address,
       restaurantId: this.restaurantId,
       totalAmount: totalAmount,

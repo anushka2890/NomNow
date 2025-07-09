@@ -32,14 +32,14 @@ public class AddressServiceImpl implements AddressService{
     }
 
     @Override
-    public AddressDTO createAddress(AddressDTO dto) {
+    public AddressDTO createAddress(AddressDTO dto, Long userId) {
         Address address = new Address();
         address.setStreet(dto.getStreet());
         address.setCity(dto.getCity());
         address.setState(dto.getState());
         address.setPincode(dto.getPincode());
         address.setLabel(dto.getLabel());
-        User user = userRepository.findById(dto.getUserId())
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         address.setUser(user);
 
