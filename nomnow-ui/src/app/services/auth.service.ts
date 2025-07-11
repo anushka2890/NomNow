@@ -58,4 +58,15 @@ export class AuthService {
       this.isLoggedInSubject.next(false);
     }
   }
+
+  // ✅ Register new user and store token
+  register(payload: {
+    name: string;
+    email: string;
+    password: string;
+    phone: string;
+  }): Observable<any> {
+    return this.http.post(`${this.BASE_URL}/register`, payload); // no tap, no token storage
+  }
+
 }

@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+
 @Service
 public class AuthService {
 
@@ -59,7 +61,7 @@ public class AuthService {
         return new AuthResponse(token, user.getEmail());
     }
 
-    public String register(AuthCreateRequestDTO request) {
+    public Map<String, String> register(AuthCreateRequestDTO request) {
         log.info("In the service for registration");
         if (repo.existsByEmail(request.getEmail())) {
             throw new RuntimeException("User already exists");
@@ -100,6 +102,6 @@ public class AuthService {
             throw new RuntimeException("User profile creation failed: " + e.getMessage());
         }
 
-        return "User registered";
+        return Map.of("message", "User registered");
     }
 }

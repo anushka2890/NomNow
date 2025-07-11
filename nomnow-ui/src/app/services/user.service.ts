@@ -24,16 +24,7 @@ export class UserService {
   }
   
   getUserProfile(): Observable<UserDTO> {
-    if (typeof window === 'undefined') {
-      // SSR environment — skip localStorage access
-      return of(); // or throw error, depending on how you handle fallback
-    }
-
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-    return this.http.get<UserDTO>(`${this.BASE_URL}/profile`, { headers }).pipe(
+    return this.http.get<UserDTO>(`${this.BASE_URL}/profile`).pipe(
       tap(user => {this.setUserId(user.id);
         this.setUser(user);
       })
@@ -49,28 +40,14 @@ export class UserService {
   }
 
   updateUser(id: number, updatedUser: UserDTO): Observable<UserDTO> {
-    const token = localStorage.getItem('token');
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-  return this.http.put<UserDTO>(`${environment.apiUrl}/users/${id}`, updatedUser, {headers});
-}
-
+    return this.http.put<UserDTO>(`${environment.apiUrl}/users/${id}`, updatedUser);
+  }
 
   getUserById(id: number): Observable<UserDTO> {
     return this.http.get<UserDTO>(`${environment.apiUrl}/users/${id}`);
   }
 
   getOrderHistory(userId: number): Observable<OrderResponse[]> {
-    if (typeof window === 'undefined') {
-    // SSR environment — skip localStorage access
-    return of(); // or throw error, depending on how you handle fallback
+    return this.http.get<OrderResponse[]>(`${environment.apiUrl}/orders/user/${userId}`);
   }
-
-  const token = localStorage.getItem('token');
-  const headers = new HttpHeaders({
-    Authorization: `Bearer ${token}`
-  });
-  return this.http.get<OrderResponse[]>(`${environment.apiUrl}/orders/user/${userId}`, {headers});
-}
 }

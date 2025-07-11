@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -26,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody AuthCreateRequestDTO request) {
+    public ResponseEntity<Map<String, String>> register(@RequestBody AuthCreateRequestDTO request) {
         log.info("Starting user registration process");
         return ResponseEntity.ok(authService.register(request));
     }

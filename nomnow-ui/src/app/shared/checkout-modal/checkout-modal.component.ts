@@ -26,7 +26,6 @@ export class CheckoutModalComponent implements OnInit {
   @Input() totalPrice: number = 0;
   
   @Output() close = new EventEmitter<void>();
-  loggedInUser?: UserDTO;
 
   addresses: Address[] = [];
   address: string = '';
@@ -45,13 +44,14 @@ export class CheckoutModalComponent implements OnInit {
     private router: Router,
     private cartService: CartService,
     private authService: AuthService,
-    private userService: UserService,
     private addressService: AddressService
   ) {}
   
   ngOnInit(): void {
     this.restaurantId = this.cartService.getRestaurantId();
+    this.fetchSavedAddresses();
   }
+
   fetchSavedAddresses(): void {
     this.addressService.getUserAddress().subscribe({
       next: (res) => {
@@ -97,19 +97,12 @@ export class CheckoutModalComponent implements OnInit {
       }))
     };
 
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    });
-
-
     console.log('Placing order with payload:', orderPayload);
     this.isLoading = true;
     this.successMessage = '';
     this.errorMessage = '';
 
-    this.http.post<OrderResponse>(`${environment.apiUrl}/orders`, orderPayload, { headers }).subscribe({
+    this.http.post<OrderResponse>(`${environment.apiUrl}/orders`, orderPayload).subscribe({
       next: (response) => {
         console.log('Order response:', response);
         this.createdOrderId = response.orderId;
